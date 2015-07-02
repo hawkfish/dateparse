@@ -1,0 +1,10 @@
+
+paper.aux
+
+*.log
+
+*.pdf
+
+*.gz
+
+*.aux
