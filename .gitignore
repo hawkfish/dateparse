@@ -6,3 +6,7 @@ paper.aux
 *.gz
 
 *.aux
+
+*.blg
+
+*.bbl

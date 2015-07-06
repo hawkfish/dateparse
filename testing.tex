@@ -18,22 +18,51 @@ Further manual tagging focused on the files most likely to represent dates. Many
 
 \subsubsection{	Minimum Descriptive Length}
 Testing of the MDL algorithm was performed on a 24-core Dell T7610 running Windows 7 with the data stored on a 250GB SSD.
- 
-%Figure M1. MDL Parsing Statistics
-To test the MDL algorithm, we ran it over the set of samples from each validation file to generate a ranked list of formats for the file. Each format was then applied to the entire file’s data set, recording both the number of errors and the elapsed times. In cases where we generated multiple formats and the main format produced errors, we applied the second format to the unparsed strings. The summary statistics from this processing are presented in Figure M1.
+
+
+\begin{table}[ht]
+\begin{tabular}{|p{0.48\linewidth}| p{0.48\linewidth}|}
+\hline
+\textbf{Number of Records} & 31,546\\ \hline
+\textbf{Error Rate} & 27.95\% \\ \hline
+\textbf{Analysis Speed ($\mu s$)} & 2,245.04 \\ \hline
+\textbf{Validation Speed ($\mu s$)} & 1.65 \\ \hline
+\textbf{Median Not Null} & 50 \\ \hline
+\end{tabular}
+\label{tab:mdlstats}
+\caption{MDL Parsing Statistics.}
+\end{table}
+
+
+
+To test the MDL algorithm, we ran it over the set of samples from each validation file to generate a ranked list of formats for the file. Each format was then applied to the entire file’s data set, recording both the number of errors and the elapsed times. In cases where we generated multiple formats and the main format produced errors, we applied the second format to the unparsed strings. The summary statistics from this processing are presented in Table 2.
 
 The analysis speed is the average time needed per sample for structure extraction. At 2.5ms, this is well below most human perceptual thresholds for a set of 32 samples, so any latency in command execution would be restricted to the ability of the underlying database to provide the samples for analysis in a timely manner. (As a column store, the TDE can often supply such domains without a full table scan, further improving responsiveness.) 
 
 The validation speed is the average time needed to parse a value, and provides an estimate of how fast an ICU-based implementation (such as the TDE) can process string values into scalars and works out to 620K values per core per second.
  
-%Figure M2. MDL Error Rate
-The error rate reflects the fact that only about 40\% of the files have an associated format that parses the non-null values without error. To examine the error rate in greater detail, we turn now to Figure M2.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{figures/FigureM2}
+\caption{MDL Error Rate}
+\label{fig:M2}
+\end{figure}
+
+
+The error rate reflects the fact that only about 40\% of the files have an associated format that parses the non-null values without error. To examine the error rate in greater detail, we turn now to Figure \ref{fig:M2}.
 
 On the left hand side, we can see that the algorithm found 744 distinct formats that parsed 13,424 files with no error. This is a remarkable number of valid formats and underscores the need for this kind of algorithm. Raising the error rate threshold to 5\% results in about 2500 formats found in 15,000 files, or nearly half of the files. 
 
-What do these formats look like? Figure M3 shows a histogram of the 25 most common formats containing a year format code at the 5\% threshold, color-coded by error rate. (A sample value is provided to the right of each bar for illustrative purposes.) The formats have also been filtered to files with at least 5 samples. Most of the samples are clearly dates with a wide range of formats (the format where the time zone is between the time and the year is surprisingly common.)
+What do these formats look like? Figure \ref{fig:M3} shows a histogram of the 25 most common formats containing a year format code at the 5\% threshold, color-coded by error rate. (A sample value is provided to the right of each bar for illustrative purposes.) The formats have also been filtered to files with at least 5 samples. Most of the samples are clearly dates with a wide range of formats (the format where the time zone is between the time and the year is surprisingly common.)
  
-%Figure M3. MDL Output
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{figures/FigureM3}
+\caption{MDL Output}
+\label{fig:M3}
+\end{figure}
+
+
 Some of the dates are clearly just numbers, but our approach is to assume that when the user tells us that the column contains dates we should find the best fit. The samples include dates from a wide range of historical sources (e.g. Roman pottery dates) so we have elected to defer the date identification task to the user.
 
 \subsubsection{Natural Language Processing}
