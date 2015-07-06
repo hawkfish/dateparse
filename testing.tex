@@ -18,9 +18,24 @@ Further manual tagging focused on the files most likely to represent dates. Many
 
 \subsubsection{	Minimum Descriptive Length}
 Testing of the MDL algorithm was performed on a 24-core Dell T7610 running Windows 7 with the data stored on a 250GB SSD.
- 
-%Figure M1. MDL Parsing Statistics
-To test the MDL algorithm, we ran it over the set of samples from each validation file to generate a ranked list of formats for the file. Each format was then applied to the entire file’s data set, recording both the number of errors and the elapsed times. In cases where we generated multiple formats and the main format produced errors, we applied the second format to the unparsed strings. The summary statistics from this processing are presented in Figure M1.
+
+
+\begin{table}[ht]
+\begin{tabular}{|p{0.48\linewidth}| p{0.48\linewidth}|}
+\hline
+\textbf{Number of Records} & 31,546\\ \hline
+\textbf{Error Rate} & 27.95\% \\ \hline
+\textbf{Analysis Speed ($\mu s$)} & 2,245.04 \\ \hline
+\textbf{Validation Speed ($\mu s$)} & 1.65 \\ \hline
+\textbf{Median Not Null} & 50 \\ \hline
+\end{tabular}
+\label{tab:mdlstats}
+\caption{MDL Parsing Statistics.}
+\end{table}
+
+
+
+To test the MDL algorithm, we ran it over the set of samples from each validation file to generate a ranked list of formats for the file. Each format was then applied to the entire file’s data set, recording both the number of errors and the elapsed times. In cases where we generated multiple formats and the main format produced errors, we applied the second format to the unparsed strings. The summary statistics from this processing are presented in Table 2.
 
 The analysis speed is the average time needed per sample for structure extraction. At 2.5ms, this is well below most human perceptual thresholds for a set of 32 samples, so any latency in command execution would be restricted to the ability of the underlying database to provide the samples for analysis in a timely manner. (As a column store, the TDE can often supply such domains without a full table scan, further improving responsiveness.) 
 
