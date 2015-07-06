@@ -14,7 +14,7 @@ The new Tableau text connector is able to automatically interpret a somewhat dif
 \subsection{Evaluation}
 Once the training data was analyzed, it was grouped by date format. A sample of each produced date format was manually labeled. This allowed us to quickly skip over very common formats like \texttt{MM/dd/yyyy} and focus our efforts on much less common formats. The samples were judged as to whether the produced format was reasonable and were tagged with correct formats if the produced format was unreasonable.
 
-Further manual tagging focused on the files most likely to represent dates. Many of the files in the collection are not actually dates, such as fields named "updated by" (which contain "date"). A random sample of 850 columns named exactly "date", "time" or "month" (case-insensitive) were manually judged.
+Further manual tagging focused on the files most likely to represent dates. Many of the files in the collection are not actually dates, such as fields named ``updated by'' (which contain ``date''). A random sample of 850 columns named exactly ``date", ``time'' or ``month'' (case-insensitive) were manually judged.
 
 \subsubsection{	Minimum Descriptive Length}
 Testing of the MDL algorithm was performed on a 24-core Dell T7610 running Windows 7 with the data stored on a 250GB SSD.
