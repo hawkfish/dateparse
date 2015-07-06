@@ -7,8 +7,8 @@ The training data and test data are taken from Public data sets. We selected a l
 Each column was then reduced to a maximum sample set of 32. We excluded domain values that appeared to be representations of \texttt{NULL}:
 \begin{itemize}
 \item Values containing the substring \texttt{NULL}
-\item Values containing no digits and at most one non-whitespace character (\textit{e.g.} \texttt{" / / "})
-\item Values on a list of empirically determined common \texttt{NULL} values (\textit{e.g.} \texttt{0000-00-00}, \texttt{NaN})
+\item Values containing no digits and at most one non-whitespace character (\eg \texttt{" / / "})
+\item Values on a list of empirically determined common \texttt{NULL} values (\eg \texttt{0000-00-00}, \texttt{NaN})
 \end{itemize}
 Columns that had no remaining valid samples were discarded. 
 
@@ -21,17 +21,17 @@ After NULL filtering, there remained one common class of date representation tha
 \subsection{The ICU Date Format Language}
 The date format syntax we selected is the one provided by the open-source project. We chose it because we were already using ICU in the code base, we had access to the source code and it provides localized date part data for a large number of languages.
 
-The syntax is documented at the ICU web site \cite{icu}. While fairly complete, it has a few limitations that we ran into when evaluating the algorithms:
+The syntax is documented at the ICU web site~\cite{ICU}. While fairly complete, it has a few limitations that we ran into when evaluating the algorithms:
 \begin{itemize}
-\item No support for 4 letter year abbreviations (\textit{e.g.} \texttt{Sept.})
-\item No support for ordinal days (\textit{e.g.} \texttt{July 4th})
-\item No support for quarter postfix notation (\textit{e.g.} \texttt{2Q})
-\item No support for variant meridian markers (\textit{e.g.} \texttt{a.m.})
+\item No support for 4 letter year abbreviations (\eg \texttt{Sept.})
+\item No support for ordinal days (\eg \texttt{July 4th})
+\item No support for quarter postfix notation (\eg \texttt{2Q})
+\item No support for variant meridian markers (\eg \texttt{a.m.})
 \end{itemize}
 
 These limitations did not affect the results significantly, and in the future we hope to submit ICU extensions to handle some of these issues.
 
-One other quirk of the ICU syntax may be a contributing factor to the user confusion around writing correct ICU date formats. The use of lexicographical case in the meta-symbols of the format language can be confusing (e.g. \texttt{y} is used for years, but \texttt{M} is used for months while \texttt{m} is used for minutes.) Another advantage of an automated algorithm is that it hides such problems from most users, significantly improving the usability of the function.
+One other quirk of the ICU syntax may be a contributing factor to the user confusion around writing correct ICU date formats. The use of lexicographical case in the meta-symbols of the format language can be confusing (\eg \texttt{y} is used for years, but \texttt{M} is used for months while \texttt{m} is used for minutes.) Another advantage of an automated algorithm is that it hides such problems from most users, significantly improving the usability of the function.
 
 \subsection{Partial Dates}
 Many of the date formats that we encountered were incomplete dates, which necessitated creating rules for what date scalar they represented.
