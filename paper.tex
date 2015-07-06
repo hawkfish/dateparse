@@ -28,10 +28,18 @@
 
 \documentclass{acm_proc_article-sp}
 
+%
+\def\sharedaffiliation{%
+\end{tabular}
+\begin{tabular}{c}}
+%
+
 \begin{document}
 
-\title{Does Anybody Really Know What Time It Is?}
-\subtitle{Automating the Extraction of Date Scalars}
+\conferenceinfo{SIGMOD}{'16 SanFrancisco, CA USA}
+
+\title{Does Anybody Really Know What Time It Is?\\
+Automating the Extraction of Date Scalars}
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -75,33 +83,31 @@
 % 1st. author
 \alignauthor
 Richard Wesley \\
-%       \affaddr{Institute for Clarity in Documentation}\\
-%       \affaddr{1932 Wallamaloo Lane}\\
-%       \affaddr{Wallamaloo, New Zealand}\\
-%       \email{trovato@corporation.com}
+%       \affaddr{Tableau Software}\\
+%       \affaddr{837 North 34th Street}\\
+%       \affaddr{Seattle, WA 98103}\\
+%      \email{hawkfish@tableau.com}
 % 2nd. author
 \alignauthor
 Vidya Setlur\\
-%       \affaddr{Institute for Clarity in Documentation}\\
-%       \affaddr{P.O. Box 1212}\\
-%       \affaddr{Dublin, Ohio 43017-6221}\\
-%       \email{webmaster@marysville-ohio.com}
+%       \affaddr{Tableau Software}\\
+ %      \affaddr{837 North 34th Street}\\
+%       \affaddr{Seattle, WA 98103}\\
+ %      \email{vsetlur@tableau.com}
 % 3rd. author
 \alignauthor
 Dan Cory\\
-%       \affaddr{The Th{\o}rv{\"a}ld Group}\\
-%       \affaddr{1 Th{\o}rv{\"a}ld Circle}\\
-%       \affaddr{Hekla, Iceland}\\
-%       \email{larst@affiliation.org}
+%       \affaddr{Tableau Software}\\
+%       \affaddr{837 North 34th Street}\\
+%       \affaddr{Seattle, WA 98103}\\
+%       \email{dcory@tableau.com}
+%       \email{\{hawkfish,vsetlur,dcory\}@tableau.com}
+\sharedaffiliation
+       \affaddr{Tableau Software}\\
+       \affaddr{837 North 34th Street}\\
+       \affaddr{Seattle, WA 98103}\\
+       \email{\{hawkfish,vsetlur,dcory\}@tableau.com}
 }
-% There's nothing stopping you putting the seventh, eighth, etc.
-% author on the opening page (as the 'third row') but we ask,
-% for aesthetic reasons that you place these 'additional authors'
-% in the \additional authors block, viz.
-\additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group,
-email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
-(The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
-\date{30 July 1999}
 % Just remember to make sure that the TOTAL number of authors
 % is the number that will appear on the first page PLUS the
 % number that will appear in the \additionalauthors section.
@@ -110,7 +116,7 @@ email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
 \begin{abstract}
 With the advent of modern data visualization tools, data preparation has become a bottleneck for analytic workflows. Users who are already engaged in data analysis prefer to stay in the visualization environment for cleaning and preparation tasks whenever possible, both to preserve analytic flow and to take advantage of the visualization environment to spot inconsistent data. This has led many visualization environments to include simple data preparation functions such as scalar parsing, pattern matching and categorical binning in their analytic toolkits.
 
-One of the most common parsing tasks is extracting date and time data from string representations. Several databases include date parsing ``mini-languages" to cover the wide range of possible formats. Tableau has recently provided a \\DATEPARSE function with a single syntax that is translated into the nearest equivalent in the underlying database. Subsequent analysis of customer usage of this function shows that the parsing language syntax was difficult for users to master. 
+One of the most common parsing tasks is extracting date and time data from string representations. Several databases include date parsing ``mini-languages" to cover the wide range of possible formats. Tableau has recently provided a function called \texttt{DATEPARSE}  with a single syntax that is translated into the nearest equivalent in the underlying database. Subsequent analysis of customer usage of this function shows that the parsing language syntax was difficult for users to master. 
 
 In this paper, we present two algorithms for automatically deriving date format strings from a column of data in our syntax, one based on minimum entropy and one based on natural language modeling. Both have similar accuracies of over 90\% on a large corpus of date columns extracted from Tableau Public and are in substantial agreement with each other. The minimal entropy approach can also produce results below the user's perceptual threshold, making it suitable for interactive work.
 \end{abstract}
@@ -148,7 +154,7 @@ In this paper, we present two algorithms for automatically deriving date format 
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
-We would like to thank to Pat Hanrahan for encouraging this work; Roger Hau for providing the resources to productize it; and Jason King, whose harrowing live demonstration of manual DATEPARSE in front of several thousand people inspired this project.
+We would like to thank to Pat Hanrahan for encouraging this work; Roger Hau for providing the resources to productize it; and Jason King, whose harrowing live demonstration of manual \texttt{DATEPARSE} in front of several thousand people inspired this project.
 
 %
 % The following two commands are all you need in the
