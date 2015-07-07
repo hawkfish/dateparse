@@ -1,7 +1,7 @@
 \subsection{Context-Free Grammar}
 ICU date-time formats are well defined both structurally and semantically, and can be defined by a context-free grammar (CFG). A CFG is commonly defined as a set of productions or rules of the form A ? ? where A is a variable, ? is a sequence of variables and terminal symbols (the tokens that make up the alphabet of the language) plus null (? ), and the production symbol (?) indicates that the variable A can be expanded into ? . A CFG can be formally specified with four components: V, T, P, and S, where V is the set of variables, T the set of terminal symbols, P the set of productions, and S the set of available start symbols (a non-empty subset of V) [cite]. 
 
-While there are several functionally equivalent notations for representing CFG, we use the \textit{Backus-Naur Form} (BNF) for defining the grammar rules for \texttt{DATEPARSE} formats.
+While there are several functionally equivalent notations for representing CFG, we use the \textit{Backus-Naur Form} (BNF) for defining the grammar rules for \texttt{DATEPARSE} formats. In particular, we use the \textit{Extended Backus-Naur Form} (EBNF) as the notation is more compact and readable for frequently used constructions~\cite{Grune:1990}.
 
 %
 %   date-fullyear   = 4DIGIT
