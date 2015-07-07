@@ -44,85 +44,13 @@
 
 \title{Does Anybody Really Know What Time It Is?\\
 Automating the Extraction of Date Scalars}
-%
-% You need the command \numberofauthors to handle the 'placement
-% and alignment' of the authors beneath the title.
-%
-% For aesthetic reasons, we recommend 'three authors at a time'
-% i.e. three 'name/affiliation blocks' be placed beneath the title.
-%
-% NOTE: You are NOT restricted in how many 'rows' of
-% ``name/affiliations'' may appear. We just ask that you restrict
-% the number of 'columns' to three.
-%
-% Because of the available 'opening page real-estate'
-% we ask you to refrain from putting more than six authors
-% (two rows with three columns) beneath the article title.
-% More than six makes the first-page appear very cluttered indeed.
-%
-% Use the \alignauthor commands to handle the names
-% and affiliations for an 'aesthetic maximum' of six authors.
-% Add names, affiliations, addresses for
-% the seventh etc. author(s) as the argument for the
-% \additionalauthors command.
-% These 'additional authors' will be output/set for you
-% without further effort on your part as the last section in
-% the body of your article BEFORE References or any Appendices.
-
-\numberofauthors{3} %  in this sample file, there are a *total*
-% of EIGHT authors. SIX appear on the 'first-page' (for formatting
-% reasons) and the remaining two appear in the \additionalauthors section.
-%
-\author{
-% You can go ahead and credit any number of authors here,
-% e.g. one 'row of three' or two rows (consisting of one row of three
-% and a second row of one, two or three).
-%
-% The command \alignauthor (no curly braces needed) should
-% precede each author name, affiliation/snail-mail address and
-% e-mail address. Additionally, tag each line of
-% affiliation/address with \affaddr, and tag the
-% e-mail address with \email.
-%
-% 1st. author
-\alignauthor
-Richard Wesley \\
-%       \affaddr{Tableau Software}\\
-%       \affaddr{837 North 34th Street}\\
-%       \affaddr{Seattle, WA 98103}\\
-%      \email{hawkfish@tableau.com}
-% 2nd. author
-\alignauthor
-Vidya Setlur\\
-%       \affaddr{Tableau Software}\\
- %      \affaddr{837 North 34th Street}\\
-%       \affaddr{Seattle, WA 98103}\\
- %      \email{vsetlur@tableau.com}
-% 3rd. author
-\alignauthor
-Dan Cory\\
-%       \affaddr{Tableau Software}\\
-%       \affaddr{837 North 34th Street}\\
-%       \affaddr{Seattle, WA 98103}\\
-%       \email{dcory@tableau.com}
-%       \email{\{hawkfish,vsetlur,dcory\}@tableau.com}
-\sharedaffiliation
-       \affaddr{Tableau Software}\\
-       \affaddr{837 North 34th Street}\\
-       \affaddr{Seattle, WA 98103}\\
-       \email{\{hawkfish,vsetlur,dcory\}@tableau.com}
-}
-% Just remember to make sure that the TOTAL number of authors
-% is the number that will appear on the first page PLUS the
-% number that will appear in the \additionalauthors section.
+\input{anonymous}
 
 \maketitle
 \begin{abstract}
-With the advent of modern data visualization tools, data preparation has become a bottleneck for analytic workflows. Users who are already engaged in data analysis prefer to stay in the visualization environment for cleaning and preparation tasks whenever possible, both to preserve analytic flow and to take advantage of the visualization environment to spot inconsistent data. This has led many visualization environments to include simple data preparation functions such as scalar parsing, pattern matching and categorical binning in their analytic toolkits.
+With the advent of modern data visualization tools, data preparation has become a bottleneck for analytic workflows. Users who are already engaged in data analysis prefer to stay in the visualization environment for cleaning and preparation tasks whenever possible, both to preserve analytic flow and to take advantage of the visualization environment to spot inconsistent data. This has led many visualization environments to include simple data preparation functions such as scalar parsing, pattern matching and categorical binning in their analytic toolkits. One of the most common scalar parsing tasks is extracting date and time data from string representations. Several databases include date parsing ``mini-languages'' to cover the wide range of possible formats. Analysis of the usage of such functions in one visualization system shows that the parsing language syntax was difficult for users to master. 
 
-One of the most common parsing tasks is extracting date and time data from string representations. Several databases include date parsing ``mini-languages'' to cover the wide range of possible formats. Tableau has recently provided a function called \dateparse with a single syntax that is translated into the nearest equivalent in the underlying database. Subsequent analysis of customer usage of this function shows that the parsing language syntax was difficult for users to master. 
-
-In this paper, we present two algorithms for automatically deriving date format strings from a column of data in our syntax, one based on minimum entropy and one based on natural language modeling. Both have similar accuracies of over 90\% on a large corpus of date columns extracted from Tableau Public and are in substantial agreement with each other. The minimal entropy approach can also produce results below the user's perceptual threshold, making it suitable for interactive work.
+In this paper, we present two algorithms for automatically deriving date format strings from a column of data, one based on minimum entropy and one based on natural language modeling. Both have similar accuracies of over 90\% on a large corpus of date columns extracted from an online data repository and are in substantial agreement with each other. The minimal entropy approach can also produce results below the user's perceptual threshold, making it suitable for interactive work.
 \end{abstract}
 
 %D.3.3 [Data Processing]: Data Cleaning, Natural Language Processing.
@@ -156,7 +84,7 @@ In this paper, we present two algorithms for automatically deriving date format 
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
-We would like to thank to Pat Hanrahan for encouraging this work; Roger Hau for providing the resources to productize it; and Jason King, whose harrowing live demonstration of manual \dateparse in front of several thousand people inspired this project.
+\input{credits}
 
 %
 % The following two commands are all you need in the

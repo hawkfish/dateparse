@@ -1,7 +1,7 @@
 Before delving into detailed descriptions of the two algorithms, we describe the common elements of the problem they are intended to solve. These are the input data, the output language and the interpretation of the output language for partial dates.
 
 \subsection{Input Data}
-The training data and test data are taken from Public data sets. We selected a large number of string columns whose names suggested that they might contain temporal data. We included words from multiple languages besides English and extracted the column's locale (actually the collation) along with the data.
+The training data and test data are taken from data sets published to our free, online visualization service. The published data includes both the raw data and how it was used for analysis. The service limits data sets to a maximum of 100K rows stored in a database which supports an implementation of \dateparse.  We selected a large number of string columns whose names suggested that they might contain temporal data. We included words from multiple languages besides English and extracted the column's locale (actually the collation) along with the data.
 
 \subsubsection{NULL Filtering}
 Each column was then reduced to a maximum sample set of 32. We excluded domain values that appeared to be representations of \texttt{NULL}:
@@ -19,7 +19,7 @@ The remaining samples were hashed and sorted on the hash value, with the top 32 
 After NULL filtering, there remained one common class of date representation that was unsuited for parsing via our date format syntax, namely numeric timestamps. This included Unix epoch timestamps (expressed as second, millisecond or microsecond counts from \texttt{1970-01-01}) and Microsoft Excel timestamps (expressed fractional days since \texttt{1900-01-01}). A simple test to check that the column was numeric and inside a specific range of values representing recent dates allowed us to tag these columns to avoid analyzing them further (and incidentally to identify them for generating a simple date extraction calculation for the user.)
 
 \subsection{The ICU Date Format Language}
-The date format syntax we selected is the one provided by the open-source project. We chose it because we were already using ICU in the code base, we had access to the source code and it provides localized date part data for a large number of languages.
+The date format syntax we selected is the one provided by the ICU open-source project. We chose it because we were already using ICU in the code base, we had access to the source code, and it provides localized date part data for a large number of languages.
 
 The syntax is documented at the ICU web site~\cite{ICU}. While fairly complete, it has a few limitations that we ran into when evaluating the algorithms:
 \begin{itemize}
@@ -36,6 +36,6 @@ One other quirk of the ICU syntax may be a contributing factor to the user confu
 \subsection{Partial Dates}
 Many of the date formats that we encountered were incomplete dates, which necessitated creating rules for what date scalar they represented.
 
-ICU's date parsing APIs allow the specification of default values for parts when a format does not contain them. In our implementation, all time fields are set to \texttt{0} (midnight) and the date fields are set based on whether the format contains any date part specifications. When date parts are present, we use \texttt{2000-01-01} as the set of default date parts as it is the start of a leap year. When dealing with pure time formats, we use \texttt{1899-12-30}, (which is the date used internally by Tableau to signal pure time values.)
+ICU's date parsing APIs allow the specification of default values for parts when a format does not contain them. In our implementation, all time fields are set to \texttt{0} (midnight) and the date fields are set based on whether the format contains any date part specifications. When date parts are present, we use \texttt{2000-01-01} as the set of default date parts as it is the start of a leap year. When dealing with pure time formats, we model the output as a date/time and use \texttt{1899-12-30} for the date parts.
 
-ICU will also parse Time Zones (which we recognize but do not use in Tableau) and Quarters (which we interpret as the first month of the period.) RDBMSes such as Oracle and Postgres that support time zones will be able to take advantage of the generated time zone field.
+ICU will also parse Time Zones (which the algorithms recognize but the visualization system does not model) and Quarters (which we interpret as the first month of the period.) RDBMSes such as Oracle and Postgres that support time zones will be able to take advantage of  identified time zone fields.

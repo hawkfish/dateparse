@@ -54,8 +54,9 @@ These global pruning rules are simple and intuitive, but are essential to furthe
 \subsection{Locale Sensitivity}
 Providing an acceptable international user experience requires correctly handling the locale of the column text. Accordingly, at the start of the structure extraction we use the column locale to create a set of domains containing locale-sensitive strings such as month names. We also use the locale to map these strings to upper- and lower-case in addition to the ICU mixed case strings. This enables us to accurately compute MDL statistics without having to map the candidate strings at runtime (which would be slow).
 
-Knowing the locale of a string is not always helpful. In our data set, we found numerous cases where the locale was specified (\eg Sweden) but the data was actually in English. Accordingly, we test both locales and rank the combined results.
-Tableau currently does not support non-Gregorian calendars. Therefore, we have built this system for the Gregorian calendar only. ICU does support non-Gregorian calendars and we expect this system could be applied to them as well.
+Knowing the locale of a string is not always helpful. In our data set, we found numerous cases where the locale was specified (\eg Sweden) but the data was actually in English. Accordingly, we test both locales and rank the combined results. 
+
+We have built this system for the Gregorian calendar only as our visualization system does not support non-Gregorian calendars and we have little evidence of other calendars (\eg Hebrew, Islamic Civil) being used for analytics. ICU supports non-Gregorian calendars and we expect the algorithm could be extended to them as well if needed.
 
 \subsection{Ranking}
 MDL structure analysis naturally produces a ranked list of format candidates, but we have found that a number of other properties of the formats should be preferred over simple compactness:
