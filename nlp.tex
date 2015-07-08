@@ -1,28 +1,40 @@
 \subsection{Context-Free Grammar}
 ICU date-time formats are well defined both structurally and semantically, and can be defined by a context-free grammar (CFG). A CFG is commonly defined as a set of productions or rules of the form A ? ? where A is a variable, ? is a sequence of variables and terminal symbols (the tokens that make up the alphabet of the language) plus null (? ), and the production symbol (?) indicates that the variable A can be expanded into ? . A CFG can be formally specified with four components: V, T, P, and S, where V is the set of variables, T the set of terminal symbols, P the set of productions, and S the set of available start symbols (a non-empty subset of V) [cite]. 
 
-While there are several functionally equivalent notations for representing CFG, we use the \textit{Backus-Naur Form} (BNF) for defining the grammar rules for \texttt{DATEPARSE} formats. In particular, we use the \textit{Extended Backus-Naur Form} (EBNF) as the notation is more compact and readable for frequently used constructions~\cite{Grune:1990}.
+While there are several functionally equivalent notations for representing CFG, we use the \textit{Backus-Naur Form} (BNF) for defining the grammar rules for \dateparse formats. In particular, we use the \textit{Extended Backus-Naur Form} (EBNF) as the notation is more compact and readable for frequently used constructions~\cite{Grune:1990}. 
 
-%
-%   date-fullyear   = 4DIGIT
-%   date-month      = 2DIGIT  ; 01-12
-%   date-mday       = 2DIGIT  ; 01-28, 01-29, 01-30, 01-31 based on month/year
-%   time-hour       = 2DIGIT  ; 00-23
-%   time-minute     = 2DIGIT  ; 00-59
-%   time-second     = 2DIGIT  ; 00-58, 00-59, 00-60 based on leap second
-%                             ; rules
-%   time-secfrac    = "." 1*DIGIT
-%   time-numoffset  = ("+" / "-") time-hour ":" time-minute
-%   time-offset     = "Z" / time-numoffset
-%
-%   partial-time    = time-hour ":" time-minute ":" time-second
-%                     [time-secfrac]
-%   full-date       = date-fullyear "-" date-month "-" date-mday
-%   full-time       = partial-time time-offset
-%
-%   date-time       = full-date | full-time
+We define a grammar for identifying date-time strings based on other EBNF based date-time formats [cite] as a reference. A partial definition of the grammar is found below (see supplementary material for complete definition):
 
-\subsection{Production Rule Constraints}
+\begin{grammar}
+<TimeGrammar> ::= <Hours> ':' <Minutes> ':' <Seconds> <AMPM>;\\
+
+<DateGrammar> ::= <BigEndianDate> 
+				\alt <MiddleEndianDate> 
+				\alt <LittleEndianDate>;
+
+<DateTimeGrammar>  ::= <DateGrammar> 
+					\alt <TimeGrammar>;
+					
+<AMPM>  ::=  WORD('a.m.') 
+			 \alt WORD('p.m.') ;
+
+<Year> ::= <TwoYear> | <FourYear>;
+
+<Month>  ::= <MonthFullForm> | <MonthAbbrForm> | <MonthLetterForm> | <MonthNumber>;
+
+<BigEndianDate> ::= <Year> <Month>  <Day> ;
+
+<MiddleEndianDate> ::= <Month> <Day> <Year>;
+
+<LittleEndianDate> ::= <Day> <Month> <Year>;
+
+\end{grammar}
+
+
+
+\subsection{Translation of Grammar Output to ICU Format}
+
+\subsection{Production Rule Constraints and Variants}
 
 
 \subsection{Probabilistic Context-Free Grammar}
