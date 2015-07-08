@@ -4,11 +4,12 @@ In recent years, there has been a growth of interest in data visualization techn
 \subsection{Interactivity}
 Visualization systems are most effective when they are interactive, thereby allowing a user to explore data and connect it to their domain knowledge and sense of what is important without breaking cognitive flow. In recent years, a number of such systems have been developed, both by the academic community and by the commercial sector. Exploration of data consists not only in creating visual displays, but also in creating and modifying domain-specific computations. Consequently, most data visualization systems include facilities for defining such calculations as part of the data model being analyzed. The most effective systems allow users to define these calculations as part of the analytic interaction, which permits the user to stay in the flow of analysis~\cite{Morton:2012}.
 
+\subsubsection{Clean as You Go}
 During the analytic process, a user may discover that parts of the data are not yet suitable for analysis. Solutions to this problem are often provided by data preparation tools external to the visual analysis environment, which requires the user to break their analytic flow, launch another tool and reprocess their data before returning to their analysis. If the user does not own this process (\eg it is the responsibility of another department), then there can be significant delays (including ``never.'') More subtly, the result of updated external processing may not be compatible with the user's existing work, which can lead to more time lost reconciling the new data model with the existing analysis.
 
 From the user's perspective, the boundary between preparation and analysis is not nearly so clean cut. Bad data is often discovered using visual analysis techniques (e.g. histograms or scatter plots) and it is most natural for the user to ``clean what she sees'' instead of switching to a second tool. This leads to an ``adaptive'' process whereby users will prefer leveraging existing tools in the analytics environment (no matter how well suited to the task) over switching to another application. Thus a well-designed interactive visual analysis environment will provide tools that enable users to perform such cleaning tasks as interactively as possible.
 
-\subsubsection{Functions}
+\subsubsection{Function Libraries}
 While the existing standards for query languages are helpful for defining a core set of row-level functions, there are many useful functions beyond the standards that are only explicitly supported by a subset of RDBMSes, often with different names. And even when a database does not provide an implementation of a particular function, it is usually possible to generate it as an inline combination of existing functionality. The calculation languages of visualization systems can thus be designed to provide a \textit{lingua franca} that tames this Babel of dialects by providing a common syntax for as many of these functions as possible.
 
 \subsection{\dateparse}
@@ -16,8 +17,7 @@ The focus of this work is the usability of one such function from our visualizat
 
 \subsubsection{	Scalar Dates}
 
-
-The SQL-99 standard defines three temporal scalar types: \texttt{DATE}, \texttt{TIMESTAMP} and \texttt{TIME}. They are typically implemented as fixed-point types containing an offset from some epoch (\eg Julian Days.) This makes them compact to store using column store coompression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, and further allows some temporal operations to be implemented very efficiently using simple arithmetic. Thus from the RDBMS perspective, representing dates in scalar form provides  benefits for users, both in terms of available operations and query performance.
+The SQL-99 standard defines three temporal scalar types: \texttt{DATE}, \texttt{TIMESTAMP} and \texttt{TIME}. They are typically implemented as fixed-point types containing an offset from some epoch (\eg Julian Days.) This makes them compact to store using column store compression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, and further allows some temporal operations to be implemented very efficiently using simple arithmetic. Thus from the RDBMS perspective, representing dates in scalar form provides  benefits for users, both in terms of available operations and query performance.
 
 \begin{figure}[ht]
 \centering
@@ -46,7 +46,7 @@ These types of visualizations are difficult to specify with simple categorical s
 
 
 \subsubsection{Parsing}
-This parsing of date representations is one of the oldest data preparation problems we have observed. A common version of this problem is how to convert columns of integers of the form \texttt{yyyyMMdd} to date scalars. Naive users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date. Unfortunately, this approach has a number of problems:
+This parsing of date representations is one of the oldest data preparation problems we have observed. A common version of this problem is how to convert columns of integers of the form \texttt{yyyyMMdd} to date scalars. Na\"{i}ve users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date. Unfortunately, this approach has a number of problems:
 \begin{itemize}
 \item String operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSes)
 \item Default parsing of date formats is locale-dependent, and may not work when the analysis is shared across an international organization (\eg between the US and European offices)
