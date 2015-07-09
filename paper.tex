@@ -44,10 +44,17 @@
 \def\dateparse{\texttt{DATEPARSE} }
 
 
+% to add comments
 \newcommand{\vidya}[1]{\textcolor{red}{(vidya: #1)}}
+
+% formatting math symbols
 \newcommand{\Mod}[1]{\ (\text{mod}\ #1)}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+% tightening the whitespace for itemize
+\newenvironment{tight_itemize}{\begin{itemize} \itemsep
+-2pt}{\end{itemize}}
 
 %
 \begin{document}
