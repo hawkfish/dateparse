@@ -6,7 +6,7 @@ While there are several functionally equivalent notations for representing CFG, 
 We define a grammar for identifying date-time strings based on other EBNF based date-time formats [cite] as a reference. A partial definition of the grammar is found below (see supplementary material for complete definition):
 
 \begin{grammar}
-<TimeGrammar> ::= <Hours> ':' <Minutes> ':' <Seconds> <AMPM>;\\
+<TimeGrammar> ::= <Hours> ':' <Minutes> ':' <Seconds> ;\\
 
 <DateGrammar> ::= <BigEndianDate> 
 				\alt <MiddleEndianDate> 
@@ -15,12 +15,6 @@ We define a grammar for identifying date-time strings based on other EBNF based 
 <DateTimeGrammar>  ::= <DateGrammar> 
 					\alt <TimeGrammar>;
 					
-<AMPM>  ::=  WORD('a.m.') 
-			 \alt WORD('p.m.') ;
-
-<Year> ::= <TwoYear> | <FourYear>;
-
-<Month>  ::= <MonthFullForm> | <MonthAbbrForm> | <MonthLetterForm> | <MonthNumber>;
 
 <BigEndianDate> ::= <Year> <Month>  <Day> ;
 
@@ -28,20 +22,60 @@ We define a grammar for identifying date-time strings based on other EBNF based 
 
 <LittleEndianDate> ::= <Day> <Month> <Year>;
 
+<Year> ::= <TwoYear> | <FourYear>;
+
+<Month>  ::= <MonthFullForm> | <MonthAbbrForm> | <MonthLetterForm> | <MonthNumber>;
+
+<Day>     ::= NUMBER(1-31);
+
+<Hour> ::= <TwelveHour> | <TwentyFourHour>
+
+<TwelveHour> ::= NUMBER(1-12);
+
+<TwentyFourHour> ::= NUMBER(1-24);
+
 \end{grammar}
 
 
 
-\subsection{Translation of Grammar Output to ICU Format}
+\subsection{Translation to ICU Format}
 
 \subsection{Production Rule Constraints and Variants}
 
 The EBNF date-time grammar includes a large number of syntactically correct but semantically invalid
-date-time expressions. For example, there is no  `November 31, 2015', `February 29, 2013',
-or `Sunday, May  5, 1965'. November only as 30 days in any year; 2013 was not a leap year; and May 5, 1965 was a Wednesday.
+date-time expressions. While we have added range restrictions to symbols such as \texttt{Hour} (1--12 for 12-hour format and 1--24 for 24-hour format), \texttt{Days} (1--7), \texttt{Month} (1--12), there are special cases that need to be accounted for. For example, there is no  `November 31, 2015', `February 29, 2013', or `Sunday, May  5, 1965'. November only as 30 days in any year; 2013 was not a leap year; and May 5, 1965 was a Wednesday.
 
-While custom production rules can be added to the existing grammar to exclude such expressions, this approach is not optimal as it leads to a rather large grammar that needs to account for every single semantically valid date-time sequence of terminal symbols. Rather, we define a grammar that excludes such expressions. By intersecting this constraint
-grammar with the Date-Time grammar, we can define a language that contains only semantically valid dates.
+While custom production rules can be added to the existing grammar to exclude such expressions, this approach is not optimal as it leads to a rather large grammar that needs to account for every single semantically valid date-time sequence of terminal symbols. Rather, we modify the existing grammar with the following additional constraints to the \texttt{Day} terminal symbol for excluding such expressions:
+\begin{itemize}
+\item Restriction on the distribution of $30$ and $31$:
+Months usually alternate between lengths of 30 and 31 days. We can use x mod 2 to get an alternating pattern of 1 and 0, then just add our constant base number of days:
+
+\begin{equation}
+\texttt{Day} = 30 + x \Mod 2
+\end{equation}
+
+where $x \in [1..12]$ for each of the $12$ months.
+
+Except February, Equation $1$ addresses January and March through July. After July, the pattern should skip one, and the rest of the months should follow the alternating pattern inversely.
+
+To obtain an inverse pattern of alternating 0 and 1, we add 1 to the dividend:
+
+\begin{equation}
+\texttt{Day} = 30 + (x + 1) \Mod 2
+\end{equation}
+
+In Equation $2$ the number of days for August through December is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Multiplying a term by this expression will result in the term being cancelled out outside its domain. To mask the latter piece of our function, we need an expression equal to $1$ where $8 \le x\le 12$. Floor division by 8 works well, since $x < 16$.
+
+Now if we substitute this expression in the x + 1 dividend of Equarion $2$, we can invert the pattern using our mask:
+
+\begin{equation}
+\texttt{Day} = 30 + (x + \floor{\frac{x}{8}}) \Mod 2
+\end{equation}
+
+Equation $3$ is now added as a restriction to the production rule \begin{grammar} <Days> ::= NUMBER(1-31) \end{grammar}.
+\item LeapYear Restriction on February 29.
+
+\end{itemize}
 
 
 

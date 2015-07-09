@@ -30,6 +30,9 @@
 %
 \usepackage{url}
 \usepackage{syntax}
+\usepackage{amsmath}% http://ctan.org/pkg/amsmath
+\usepackage{mathtools}
+
 
 %
 \def\sharedaffiliation{%
@@ -42,6 +45,10 @@
 
 
 \newcommand{\vidya}[1]{\textcolor{red}{(vidya: #1)}}
+\newcommand{\Mod}[1]{\ (\text{mod}\ #1)}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
 %
 \begin{document}
 
