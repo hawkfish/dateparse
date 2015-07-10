@@ -1,13 +1,19 @@
 \subsection{Data}
 
-\subsubsection{Training Data}
-We scanned all files published to a free, online data analysis website through February 2014. We collected the contents of columns with names containing any of the following strings: Date, month, created, dt (abbreviation for date), mes (month in Spanish), datum (date in German), fecha (date in Spanish), data (date in Portuguese), and the day character used in Chinese and Japanese. Roughly 95\% of the data on the website is in English, but we attempted to include non-English data that was available. Fields of any data type other than date or datetime were analyzed, including strings, integers, and floats. One file was created for each scanned column, containing the unique non-null values in the column.
+We scanned all files published to a free, online data analysis website. We collected the contents of columns with names containing any of the following strings: Date, month, created, dt (abbreviation for date), mes (month in Spanish), datum (date in German), fecha (date in Spanish), data (date in Portuguese), and the day character used in Chinese and Japanese. Roughly 95\% of the data on the website is in English, but we attempted to include non-English data that was available. Fields of any data type other than date or datetime were analyzed, including strings, integers, and floats. One file was created for each scanned column, containing the unique non-null values in the column.
 
-The resulting set of files were de-duplicated. This handles any duplicate files such as sample data. Files over 1MB were manually reviewed and those that did not contain dates removed. There were 30,968 files in the resulting set.
+The resulting set of files were de-duplicated. This handles any duplicate files from repeated publishing events. Files over 1MB were manually reviewed and those that did not contain dates removed. 
+
 Most database and spreadsheet systems already detect a limited set of date formats. For instance, typing the string \texttt{"12/31/1999"} into Microsoft Excel, is automatically interpreted as the date \texttt{1999-12-31}. The Microsoft Jet library used to read these text files detects a few date formats as well. Any column already converted by Excel or Jet was not included in this study.
 
-\textbf{Verification Data}\\
-Verification used another set of data from the same website, collected from May 2014 to April 2015. This set was collected similarly, but also added columns named time. There may be some duplication between the training and verification data. There were 31,546 files in the resulting set.
+% Should we quantify the number of formats excluded here?
+
+\subsubsection{Training Data}
+
+Training used a subset of the online data uploaded through February 2014. There were 30,968 files in the resulting set.
+
+\subsubsection{Verification Data}
+Verification used another set of data from the same website, collected from May 2014 to April 2015. This set was collected similarly, but also added columns named time. There may be some duplication between the training and verification data. There were 31,546 files in the resulting verification set.
 
 \subsection{Evaluation}
 Once the training data was analyzed, it was grouped by date format. A sample of each produced date format was manually labeled. This allowed us to quickly skip over very common formats like \texttt{MM/dd/yyyy} and focus our efforts on much less common formats. The samples were judged as to whether the produced format was reasonable and were tagged with correct formats if the produced format was unreasonable.
