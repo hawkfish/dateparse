@@ -18,9 +18,9 @@ Verification used another set of data from the same website, collected from May 
 \subsection{Evaluation}
 Once the training data was analyzed, it was grouped by date format. A sample of each produced date format was manually labeled. This allowed us to quickly skip over very common formats like \texttt{MM/dd/yyyy} and focus our efforts on much less common formats. The samples were judged as to whether the produced format was reasonable and were tagged with correct formats if the produced format was unreasonable.
 
-Further manual tagging focused on the files most likely to represent dates. Many of the files in the collection are not actually dates, such as fields named ``updated by'' (which contain ``date''). A random sample of 850 columns named exactly ``date", ``time'' or ``month'' (case-insensitive) were manually judged.
+Further manual tagging focused on the files most likely to represent dates. Many of the files in the collection are not actually dates, such as fields named ``updated by'' (which contain ``date''). A random sample of 850 columns named exactly ``date'', ``time'' or ``month'' (case-insensitive) were manually judged.
 
-\subsubsection{	Minimum Descriptive Length}
+\subsubsection{Minimum Descriptive Length}
 Testing of the MDL algorithm was performed on a 24-core Dell T7610 running Windows 7 with the data stored on a 250GB SSD.
 
 
@@ -72,4 +72,5 @@ Some of the dates are clearly just numbers, but our approach is to assume that w
 
 \subsubsection{Natural Language Processing}
 
-\subsubsection{	Cross-Checking}
+\subsubsection{Cross-Checking}
+We compared the results of the minimum description length and natural language processing algorithms. The two algorithms match for 97.9% of our validation set. The main differences in the results are due to small differences in the implementations. The minimum description length implementation recognizes formats with leading plus and minus signs, but these are almost certainly numbers, not dates. The minimum description length implementation also recognizes the Excel date formats, but this was not supported by the natural language implementation. There was one file that contained formats such as ``Fall 2000'' and ``Spring 2000'', and the two algorithms picked different seasons in their format. One other file contained a set of integers that are not actually dates, and one algorithm picked MMyyyy format, while the other picked HHmmss format.
