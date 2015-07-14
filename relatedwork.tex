@@ -1,12 +1,14 @@
-% vidya: this probably should be its own section
-% hawkfish: Not sure it is big enough, but I can see the logic.
 
 Data preparation has been considered an analytic bottleneck since at least the description of the Potter's Wheel system~\cite{Raman:2001}. Since then, several other interactive data preparation systems have been proposed, including Data Wrangler~\cite{Kandel:2011} and Google Refine~\cite{Refine}. While effective, these systems all make assumptions about possible date formats, which we suggest are too restrictive for real world data.
 
 Various approaches have been described for deriving regular expressions, and a good overview is provided by Li et al. in their paper on the ReLIE system for deriving regular expressions given a starting expression provided by a domain expert~\cite{Li:2008}. The Minimum Descriptive Length technique first described in Rissanen~\cite{Rissanen:1978} was used in~\cite{Raman:2001} to generate regular expressions. 
 
-There are several bodies of research on developing semantic parsers and grammars for interpreting time and date expressions. Lee \textit{et al} use a combinatory categorical grammar by combining the TIMEX3 standard~\cite{timex3} with contextual cues such as document creation time to determine the reference for parsing time expressions such as `2nd Friday of July'~\cite{LeeADZ14}.
- 
+There are several bodies of research on developing semantic parsers and grammars for interpreting time and date expressions. Lee \textit{et al} use a combinatory categorical grammar by combining the TIMEX3 standard~\cite{timex3} with contextual cues such as document creation time to determine the reference for parsing time expressions such as `2nd Friday of July'~\cite{LeeADZ14}. Related work by Gabor \textit{et al.} employs a probabilistic approach for learning to interpret temporal phrases~\cite{Angeli:2012}. Han and Lavie developed a formalism called the Time Calculus for Natural Language (TCNL), designed to capture the meaning of temporal expressions in natural language. In this formalism, each temporal expression is converted to a formula in TCNL, which then can be processed to calculate the value of a temporal expression. Their temporal focus tracking mechanism allows correct interpretation of cases like `I am free next week. How
+about Friday?', where the TCNL formula for Friday, reflects the occurrence of `next' in the preceding sentence~\cite{Han:2004}.  In all this previous research using natural language techniques, the interpretation of temporal expressions are done individually, using the presence of lexical tokens such as `next' and `past' along with the tense of the verb tokens.
+
+Ou work differs from these previous methods for parsing date-time expressions as we are using an entire column of data as context without the necessary presence of rich lexical identifiers to determine temporal context. This sort of data tends to be prevalent in datasets that are used in visualizations. 
+
+
 \vidya{Should this be preceded by a bulleted list of contributions, under the section Contributions?}
 %\subsection{Overview}
 The rest of this paper is organized as follows: The next section introduces the parameters of the problem space. The following two sections describe the two different algorithms, one using Minimum Descriptive Length and the other using Natural Language Processing. In section 5, we evaluate the algorithms on a corpus of 30K columns, both by sampling the outputs manually and then by using the algorithms to validate each other. We then discuss future work in section 6 and conclude in section 7.
