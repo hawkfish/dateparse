@@ -28,13 +28,13 @@ We define a grammar for identifying date-time strings based on other EBNF based 
 
 <Month>  ::= <MonthFullForm> | <MonthAbbrForm> | <MonthLetterForm> | <MonthNumber>;
 
-<Day>     ::= d d (between 01 and 28-31, depending on month/year);
+<Day>     ::= dd (between 01 and 28-31, depending on month/year);
 
 <Hour> ::= <TwelveHour> | <TwentyFourHour>
 
-<TwelveHour> ::= d d (between 00-12);
+<TwelveHour> ::= dd (between 00-12);
 
-<TwentyFourHour> ::= d d (between 00 and 23);
+<TwentyFourHour> ::= dd (between 00 and 23);
 
 <d> ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9'
 
@@ -101,11 +101,20 @@ Pattern-recognition problems such as parsing date and time formats initiate from
 
 In the context of CFGs, probabilities have been used to define a probability distribution over a set of parse trees defined by the CFG, and are a useful method for modeling such ambiguity~\cite{Collins:2003,Manning:1999}. The resulting formalism called Probabilistic Context-Free Grammar (PCFG), extends the CFG by assigning probabilities to the production rules of the grammar. During the process of parsing the date-time pattern, the probabilities are used as a filtering mechanism to rank the pattern(s) that a given string resolves to in the grammar. 
 
+(add notation for how rules are defined)
+
 Given a CFG grammar $G$, we define  $\tau_G(s)$ as the set of all possible parse trees for input date-time string $s$.  For any $t \in \tau(G)$, the probability $p(t) \ge 1$. In addition, $\sum_{t \in \tau_{G}} = 1$. The parser then chooses the parse tree with the maximum probability, \textit{i.e.} given a date-time string $s$, as input, we determine the highest scoring parse tree $t$ as  $max_{t \in \tau(s)} p(t)$.
 
+In order to bootstrap the probability weights in the \texttt{PCFG}, we manually set initial probability weights to various rules in the grammar as follows:
+\begin{itemize}
+\item Similar to the MDL ranking properties described in Section 3.7, rules involving the non-terminal \texttt{DateGrammar} on the left-side of the rule, are assigned probability weights higher than those rules with the non-terminal being \texttt{TimeGrammar}. In practice, assigning $p(\texttt{DateGrammar} \rightarrow \beta_{1}) = 0.9$ and $p(\texttt{TimeGrammar} \rightarrow \beta_{2}) = 0.7$ leads to optimal ranking of the parse trees.
+
+\item For the non-terminal symbol \texttt{Day}, the constraint specified is a range between 01 and 28-31, depending on month/year. However, for \texttt{dd} $> 12$, $p(\texttt{Day} \rightarrow d d) = 1.0$, and $0.5$ otherwise. This assignment helps disambiguate days from months.
 
 
-(add the rules for how probabilistic weights are assigned to the CFG)
+\end{itemize}
+
+
 (show cfg with prob values)
 (examples -> one ambiguous, one not)
 (parse tree with final probability weights)
