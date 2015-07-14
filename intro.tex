@@ -85,15 +85,3 @@ After providing this new function to our user base, we waited a few months and t
 \subsection{Automated Format Extraction}
 One solution to this problem might have been to design a graphical environment that enabled users to construct valid patterns. This would have involved a substantial development effort with no guarantee that the result would be correct if the user misunderstood the environment. Instead, we have developed two algorithms for automating the derivation of the format string, each of which uses a different machine learning technique. Both algorithms result in over 90\% parsing accuracy -- and 100\% syntactic correctness because they are machine generated.
 
-% vidya: this probably should be its own section
-% hawkfish: Not sure it is big enough, but I can see the logic.
-
-\subsection{Related Work}
-Data preparation has been considered an analytic bottleneck since at least the description of the Potter's Wheel system~\cite{Raman:2001}. Since then, several other interactive data preparation systems have been proposed, including Data Wrangler~\cite{Kandel:2011} and Google Refine~\cite{Refine}. While effective, these systems all make assumptions about possible date formats, which we suggest are too restrictive for real world data.
-
-Various approaches have been described for deriving regular expressions, and a good overview is provided by Li et al. in their paper on the ReLIE system for deriving regular expressions given a starting expression provided by a domain expert~\cite{Li:2008}. The Minimum Descriptive Length technique first described in Rissanen~\cite{Rissanen:1978} was used in~\cite{Raman:2001} to generate regular expressions. 
-
-Related work on parsing languages, outlier detection??
-
-\subsection{Overview}
-The rest of this paper is organized as follows: The next section introduces the parameters of the problem space. The following two sections describe the two different algorithms, one using Minimum Descriptive Length and the other using Natural Language Processing. In section 5, we evaluate the algorithms on a corpus of 30K columns, both by sampling the outputs manually and then by using the algorithms to validate each other. We then discuss future work in section 6 and conclude in section 7.
