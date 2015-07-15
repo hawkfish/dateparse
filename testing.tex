@@ -71,7 +71,13 @@ What do these formats look like? Figure \ref{fig:M3} shows a histogram of the 25
 Some of the dates are clearly just numbers, but our approach is to assume that when the user tells us that the column contains dates we should find the best fit. The samples include dates from a wide range of historical sources (\eg Roman pottery dates) so we have elected to defer the date identification task to the user.
 
 \subsubsection{Natural Language Processing}
-We implemented the grammar, training and parsing in Python 3.4.1 using the Natural Language Toolkit libraries~\cite{nltk} on a quad core Dell T7600 running Windows 7.
+We implemented the grammar, training and parsing in Python 3.4.1 using the Natural Language Toolkit libraries~\cite{nltk} on a quad core Dell T7600 running Windows 7. For parsing the PCFG, we use a CKY parser, a dynamic programming algorithm that identifies the highest probable syntactic parse trees, given the grammar and an input date-time string. The complexity of the parsing algorithm is $O(n^{3}|G|)$, where $n$ is the length of the input and $|G|$ is the size of the grammar~\cite{Younger67}. The PCFG grammar uses a set of X phrase-level non-terminals and Y terminals to classify the various constituents in the corpus. Since the CKY algorithm finds the maximum likelihood solution, there are no search errors, and a modification in the grammar is required to improve accuracy.
+
+Similar to the MDL algorithm described in the previous subsection, The CKY parser is run over the same set of samples from each validation file to generate a ranked list of parse trees representing the date-time formats. Starting from the most probable parse tree, each parse tree is then applied to the entire file's columnar data to determine the dominant pattern.
+
+
+
+%% talk about data formats it recognizes and doesn't recognize.
 
 
 \subsubsection{Cross-Checking}
