@@ -40,7 +40,7 @@ Testing of the MDL algorithm was performed on a 24-core Dell T7610 running Windo
 
 
 
-To test the MDL algorithm, we ran it over the set of samples from each validation file to generate a ranked list of formats for the file. Each format was then applied to the entire file’s data set, recording both the number of errors and the elapsed times. In cases where we generated multiple formats and the main format produced errors, we applied the second format to the unparsed strings. The summary statistics from this processing are presented in Table 2.
+To test the MDL algorithm, we ran it over the set of samples from each validation file to generate a ranked list of formats for the file. Each format was then applied to the entire file's data set, recording both the number of errors and the elapsed times. In cases where we generated multiple formats and the main format produced errors, we applied the second format to the unparsed strings. The summary statistics from this processing are presented in Table 2.
 
 The analysis speed is the average time needed per sample for structure extraction. At 2.5ms, this is well below most human perceptual thresholds for a set of 32 samples, so any latency in command execution would be restricted to the ability of the underlying database to provide the samples for analysis in a timely manner. (As a column store, the TDE can often supply such domains without a full table scan, further improving responsiveness.) 
 
@@ -71,6 +71,8 @@ What do these formats look like? Figure \ref{fig:M3} shows a histogram of the 25
 Some of the dates are clearly just numbers, but our approach is to assume that when the user tells us that the column contains dates we should find the best fit. The samples include dates from a wide range of historical sources (\eg Roman pottery dates) so we have elected to defer the date identification task to the user.
 
 \subsubsection{Natural Language Processing}
+We implemented the grammar, training and parsing in Python 3.4.1 using the Natural Language Toolkit libraries~\cite{nltk} on a quad core Dell T7600 running Windows 7.
+
 
 \subsubsection{Cross-Checking}
 We compared the results of the minimum description length and natural language processing algorithms. The two algorithms match for 97.9\% of our validation set. The main differences in the results are due to small differences in the implementations. The minimum description length implementation recognizes formats with leading plus and minus signs, but these are almost certainly numbers, not dates. The minimum description length implementation also recognizes the Excel date formats, but this was not supported by the natural language implementation. There was one file that contained formats such as ``Fall 2000'' and ``Spring 2000'', and the two algorithms picked different seasons in their format. One other file contained a set of integers that are not actually dates, and one algorithm picked MMyyyy format, while the other picked HHmmss format.
