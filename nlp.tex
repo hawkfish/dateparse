@@ -59,7 +59,8 @@ We define a \textit{EBNF} grammar for identifying date-time strings below:
 
 \end{grammar}
 
-The parsed output is then converted to the ICU Date Format Language described in Section 3.2 in order to effectively cross-validate results from the MDL algorithm.
+
+The parsed output is then converted to the ICU Date Format Language described in Section 3.2 in order to effectively cross-validate results from the MDL algorithm. While this grammar accounts for the use of `a.m.' and `p.m.' for the 12-hour format , ICU does not support these tokens, and they are simply ignored.
 
 \subsection{Grammar Variants and Constraints}
 
@@ -106,6 +107,8 @@ While the above restriction applies to all months barring \texttt{February}, we 
 \end{equation}
 
 \end{itemize}
+
+However, Equation $4$ is just an approximation. The Gregorian calendar also requires that a year evenly divisible by $100$ (\textit{e.g.}, 1800) is a leap year only if it is also evenly divisible by $400$. 
 
 Equations $3$ and $4$ are now added as constraints to the \texttt{Days} symbol in the grammar.
 
