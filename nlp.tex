@@ -60,7 +60,7 @@ We define a \textit{EBNF} grammar for identifying date-time strings as follows:
 \end{grammar}
 
 
-The parsed output is then converted to the ICU Date Format Language described in Section 3.2 in order to effectively cross-validate results from the MDL algorithm. While this grammar accounts for the use of `a.m.' and `p.m.' for the 12-hour format , ICU does not support these tokens, and they are simply ignored.
+The parsed output is then converted to the ICU Date Format Language described in Section 3.2 in order to effectively cross-validate results from the MDL algorithm. While this grammar accounts for the use of meridian markers `a.m.' and `p.m.' for the 12-hour format, ICU does not support these tokens, and they are simply ignored.
 
 \subsection{Grammar Variants and Constraints}
 
