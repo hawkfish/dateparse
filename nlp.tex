@@ -8,7 +8,7 @@ ICU date formats are well defined both structurally and semantically, and can be
 While there are several functionally equivalent notations for representing CFG, we use the \textit{Backus-Naur Form} (BNF) for defining the grammar rules for \dateparse formats. In particular, we use the \textit{Extended Backus-Naur Form} (EBNF) as the notation is more compact and readable for frequently used constructions~\cite{Grune:1990}. We use a Cocke-Younger-Kasami (CYK) parser for syntactically parsing a column of date-time strings based on the grammar~\cite{Cocke:1969,Younger67,Kasami:1965}. The parser is a dynamic programming algorithm that identifies the highest probable syntactic parse trees, given the grammar and an input date-time string.
 
 
-We define a \textit{EBNF} grammar for identifying date-time strings below:
+We define a \textit{EBNF} grammar for identifying date-time strings as follows:
 
 \begin{grammar}
 <TimeGrammar> ::= <Hours> ':' <Minutes> ':' <Seconds> <TimeZone> <AMPM> (for 12-hour formats)
