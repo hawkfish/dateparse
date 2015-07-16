@@ -17,7 +17,7 @@ The focus of this work is the usability of one such function from our visualizat
 
 \subsubsection{	Scalar Dates}
 
-The SQL-99 standard defines three temporal scalar types: \texttt{DATE}, \texttt{TIMESTAMP} and \texttt{TIME}. They are typically implemented as fixed-point types containing an offset from some epoch (\eg Julian Days.) This makes them compact to store using column store compression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, and further allows some temporal operations to be implemented very efficiently using simple arithmetic. Thus from the RDBMS perspective, representing dates in scalar form provides  benefits for users, both in terms of available operations and query performance.
+The SQL-99 standard defines three temporal scalar types: \texttt{DATE}, \texttt{TIMESTAMP} and \texttt{TIME}, which can be further qualified as either \texttt{WITH} or \texttt{WITHOUT} \texttt{TIME ZONE} (the \texttt{WITHOUT} form being more common.) They are typically implemented as fixed-point types containing an offset from some epoch (\eg Julian Days.) This makes them compact to store using column store compression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, and further allows some temporal operations to be implemented very efficiently using simple arithmetic. Thus from the RDBMS perspective, representing dates in scalar form provides  benefits for users, both in terms of available operations and query performance.
 
 \begin{figure}[ht]
 \centering
@@ -49,7 +49,7 @@ These types of visualizations are difficult to specify with simple categorical s
 This parsing of date representations is one of the oldest data preparation problems we have observed. A common version of this problem is how to convert columns of integers of the form \texttt{yyyyMMdd} to date scalars. Na\"{i}ve users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date. Unfortunately, this approach has a number of problems:
 \begin{itemize}
 \item String operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSes)
-\item Default parsing of date formats is locale-dependent, and may not work when the analysis is shared across an international organization (\textit{e.g} between the US and European offices)
+\item Default parsing of date formats is locale-dependent, and may not work when the analysis is shared across an international organization (\eg between the US and European offices)
 \item The parsing code is hard to understand and maintain because it uses a verbose, general-purpose string-handling syntax instead of a specialized domain language.
 \end{itemize}
 
@@ -79,7 +79,7 @@ Our first attempt to help users with this problem was to add a new function to t
 
 We chose the date parsing syntax defined by the International Components for Unicode (or ICU) project~\cite{ICU} for the common domain language because it mirrored what was already available in our code base, and translating this syntax into the formats used by various database vendors was relatively painless. There are a few patches of non-overlapping functionality, but they tend to be obscure and we provide warnings when functionality is missing.
 
-\subsubsection{	Usability}
+\subsubsection{Usability}
 After providing this new function to our user base, we waited a few months and then investigated how it was being applied in a free, cloud-based version of the system. We found that although there were a number of new calculations using \dateparse, the error rate for the domain language syntax was about 15\%. \dateparse was capable of solving the problem, and some users were able to discover it, but the syntax did not appear to be easy to use reliably.
 
 \subsection{Automated Format Extraction}
