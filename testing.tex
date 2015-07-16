@@ -44,7 +44,7 @@ To test the MDL algorithm, we ran it over the set of samples from each validatio
 
 The analysis speed is the average time needed per sample for structure extraction. At 2.5ms, this is well below most human perceptual thresholds for a set of 32 samples, so any latency in command execution would be restricted to the ability of the underlying database to provide the samples for analysis in a timely manner. (As a column store, the database can often supply such domains without a full table scan, further improving responsiveness.) 
 
-The validation speed is the average time needed to parse a value, and provides an estimate of how fast an ICU-based implementation can process string values into scalars and works out to 620K values per core per second.
+The validation speed is the average time needed to parse a value, and provides an estimate of how fast an ICU-based implementation can process string values into scalars and works out to 620K values per core per second.\\
  
 \begin{figure}[ht]
 \centering
