@@ -61,7 +61,7 @@ We have built this system for the Gregorian calendar only as our visualization s
 \subsection{Ranking}
 MDL structure analysis naturally produces a ranked list of format candidates, but we have found that a number of other properties of the formats should be preferred over simple compactness:
 \begin{itemize}
-\item Since we have a set of samples, we can apply the candidate format to the strings to see how well it performs. Formats with fewer parse errors are preferred.
+\item Because we have a set of samples, we can apply the candidate format to the strings to see how well it performs. Formats with fewer parse errors are preferred.
 \item Date parts can be considered a place-value system, so we prefer ``more significant'' components (\eg month-day-year over hour-minute-second).
 \item If two formats from different locales give the same results, prefer the original column locale. The sample set may have missed an example where this could be important.
 \item If the format has an ambiguous date order (\eg all days are less than 12), then prefer the default date order of the locale. Again, the sample set may have missed a counterexample, so this is the best option.
