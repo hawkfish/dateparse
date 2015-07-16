@@ -49,7 +49,7 @@ These types of visualizations are difficult to specify with simple categorical s
 This parsing of date representations is one of the oldest data preparation problems we have observed. A common version of this problem is how to convert columns of integers of the form \texttt{yyyyMMdd} to date scalars. Na\"{i}ve users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date. Unfortunately, this approach has a number of problems:
 \begin{itemize}
 \item String operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSes)
-\item Default parsing of date formats is locale-dependent, and may not work when the analysis is shared across an international organization (\eg between the US and European offices)
+\item Default parsing of date formats is locale-dependent, and may not work when the analysis is shared across an international organization (\textit{e.g.} between the US and European offices)
 \item The parsing code was hard to understand and maintain because it used a verbose, general-purpose string-handling syntax instead of a specialized domain language.
 \end{itemize}
 

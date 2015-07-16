@@ -8,7 +8,7 @@ ICU date formats are well defined both structurally and semantically, and can be
 While there are several functionally equivalent notations for representing CFG, we use the \textit{Backus-Naur Form} (BNF) for defining the grammar rules for \dateparse formats. In particular, we use the \textit{Extended Backus-Naur Form} (EBNF) as the notation is more compact and readable for frequently used constructions~\cite{Grune:1990}. We use a Cocke-Younger-Kasami (CYK) parser for syntactically parsing a column of date-time strings based on the grammar~\cite{Cocke:1969,Younger67,Kasami:1965}. The parser is a dynamic programming algorithm that identifies the highest probable syntactic parse trees, given the grammar and an input date-time string.
 
 
-We define a grammar for identifying date-time strings based on other EBNF based date-time formats as a reference  [cite] . The definition of the grammar is found below:
+We define a \textit{EBNF} grammar for identifying date-time strings below:
 
 \begin{grammar}
 <TimeGrammar> ::= <Hours> ':' <Minutes> ':' <Seconds> <TimeZone> <AMPM> (for 12-hour formats)
@@ -63,10 +63,10 @@ The parsed output is then converted to the ICU Date Format Language described in
 
 \subsection{Grammar Variants and Constraints}
 
-A classical CFG performs poorly on inflected expressions resulting from misapplication of morphological inflection and syntactic rules. Large numbers of non-terminals are necessary for representation of all variations of such features, and the parser output would consist of many parse trees. We extend the date-time grammar by adding morpho-syntactic variants. These variants allows the parser to correct for syntactic errors (\textit{e.g.} usage of whitespace characters and punctuation marks), capitalization errors and abbreviations (\textit{e.g.} `Mon' for `Monday'). We use several various external corpora for such corrections~\cite{nltkcorpora}.
+A classical CFG performs poorly on inflected expressions resulting from misapplication of morphological inflection and syntactic rules. Large numbers of non-terminals are necessary for representation of all variations of such features, and the parser output would consist of many parse trees. We extend the date-time grammar by adding morpho-syntactic variants. These variants allows the parser to correct for syntactic errors (\textit{e.g.} usage of whitespace characters and punctuation marks), capitalization errors and abbreviations (\textit{e.g.} \texttt{`Mon'} for \texttt{Monday}). We use several various external corpora for such corrections~\cite{nltkcorpora}.
 
 The date-time grammar also includes a large number of syntactically correct but semantically invalid
-date-time expressions. While we have added range restrictions to symbols such as \texttt{Hour} (1--12 for 12-hour format and 1--24 for 24-hour format), \texttt{Days} (1--7), \texttt{Month} (1--12), there are special cases that need to be accounted for. For example, there is no  `November 31, 2015', `February 29, 2013', or `Sunday, May  5, 1965'. November only as 30 days in any year; 2013 was not a leap year; and May 5, 1965 was a Wednesday.
+date-time expressions. While we have added range restrictions to symbols such as \texttt{Hour} (1--12 for 12-hour format and 1--24 for 24-hour format), \texttt{Days} (1--7), \texttt{Month} (1--12), there are special cases that need to be accounted for. For example, there is no  \texttt{`November 31, 2015'}, \texttt{`February 29, 2013'}, or \texttt{`Sunday, May  5, 1965'}. November only as 30 days in any year; 2013 was not a leap year; and May 5, 1965 was a Wednesday.
 
 While custom production rules can be added to the existing grammar to exclude such expressions, this approach is not optimal as it leads to a rather large grammar that needs to account for every single semantically valid date-time sequence of terminal symbols. Rather, we modify the existing grammar with the following additional constraints to the \texttt{Day} terminal symbol for excluding such expressions:
 
@@ -80,7 +80,7 @@ Months usually alternate between lengths of 30 and 31 days. We can use x mod 2 t
 
 where $x \in [1..12]$ for each of the $12$ months.
 
-Except February, Equation $1$ addresses January and March through July. After July, the pattern should skip one, and the rest of the months should follow the alternating pattern inversely.
+Except for \texttt{February}, Equation $1$ addresses \texttt{January} and \texttt{March} through \texttt{July}. After \texttt{July}, the pattern should skip one, and the rest of the months should follow the alternating pattern inversely.
 
 To obtain an inverse pattern of alternating 0 and 1, we add 1 to the dividend:
 
@@ -88,7 +88,7 @@ To obtain an inverse pattern of alternating 0 and 1, we add 1 to the dividend:
 \texttt{Day} = 30 + (x + 1) \Mod 2
 \end{equation}
 
-In Equation $2$ the number of days for August through December is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Multiplying a term by this expression will result in the term being cancelled out outside its domain. To mask the latter piece of our function, we need an expression equal to $1$ where $8 \le x\le 12$. Floor division by 8 works well, since $x < 16$.
+In Equation $2$ the number of days for \texttt{August} through \texttt{December} is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Multiplying a term by this expression will result in the term being cancelled out outside its domain. To mask the latter piece of our function, we need an expression equal to $1$ where $8 \le x\le 12$. Floor division by 8 works well, since $x < 16$.
 
 Now if we substitute this expression in the x + 1 dividend of Equation $2$, we can invert the pattern using our mask:
 
@@ -97,8 +97,8 @@ Now if we substitute this expression in the x + 1 dividend of Equation $2$, we c
 \end{equation}
 
 
-\item LeapYear Restriction for February:
-While the above restriction applies to all months barring February, we also apply a constraint to the number of days for February, based on whether the year is leap year or not. For this, we define a new symbol in the grammar called \texttt{LeapYear}. If an expression containing the month `February' or any such variant (\textit{e.g.} `Feb', `2') with the day `29' and a year, would need to resolve the \texttt{Year} symbol to be a \texttt{LeapYear}, defined as:
+\item LeapYear Restriction for \texttt{February}:
+While the above restriction applies to all months barring \texttt{February}, we also apply a constraint to the number of days for February, based on whether the year is leap year or not. For this, we define a new symbol in the grammar called \texttt{LeapYear}. If an expression containing the month \texttt{`February'} or any such variant (\textit{e.g.} \texttt{`Feb'}, \texttt{`2'}) with the day \texttt{`29'} and a year, would need to resolve the \texttt{Year} symbol to be a \texttt{LeapYear}, defined as:
 
 \begin{equation}
 \texttt{Year} \Mod 4 == 0
@@ -110,7 +110,7 @@ Equations $3$ and $4$ are now added as constraints to the \texttt{Days} symbol i
 
 \subsection{Probabilistic Context-Free Grammar}
 
-Pattern-recognition problems such as parsing date and time formats initiate from observations generated by some structured stochastic process. In other words, even if the initial higher-level production rule of the grammar is known (i.e. date, time or date-time), there could be several directions that the parser resolves to. For example, in a date string \texttt{5/6/2015}, the pattern could either be \texttt{M/d/yyyy} or \texttt{d/M/yyyy}. 
+Pattern-recognition problems such as parsing date and time formats initiate from observations generated by some structured stochastic process. In other words, even if the initial higher-level production rule of the grammar is known (i.e. date, time or date-time), there could be several directions that the parser resolves to. For example, in a date string \texttt{`5/6/2015'}, the pattern could either be \texttt{M/d/yyyy} or \texttt{d/M/yyyy}. 
 
 In the context of CFGs, probabilities have been used to define a probability distribution over a set of parse trees defined by the CFG, and are a useful method for modeling such ambiguity~\cite{Collins:2003,Manning:1999}. The resulting formalism called Probabilistic Context-Free Grammar (PCFG), extends the CFG by assigning probabilities to the production rules of the grammar. During the process of parsing the date-time pattern, the probabilities are used as a filtering mechanism to rank the pattern(s) that a given string resolves to in the grammar. 
 
@@ -142,8 +142,8 @@ the parse trees $\tau$, and $Count(X)$ is the number of times the non-terminal $
 
 \subsection{Context Extensions to the Grammar}
 
-The grammar parser's success is often limited by data ambiguity, and incomplete expressions. For example an input string `3/7/2005' could either be interpreted as as the 7th day of March or the 3rd day of July depending on the date format used. While a single entry cannot resolve the parser's ambiguity, a column of data provides more context for determining the dominant pattern prevalent in the dataset. 
+The grammar parser's success is often limited by data ambiguity, and incomplete expressions. For example an input string \texttt{`3/7/2005'} could either be interpreted as as the 7th day of March or the 3rd day of July depending on the date format used. While a single entry cannot resolve the parser's ambiguity, a column of data provides more context for determining the dominant pattern prevalent in the dataset. 
 
-The CKY parser is run over the same set of samples from each validation file to generate a probabilistic distribution of possible parse trees corresponding to a set of date-time patterns. As a second pass of the parser, starting from the most probable parse tree, each parse tree is then applied to the entire file's columnar data to determine the dominant pattern. For example, another entry in the same dataset could be `25/3/2007' thus increasing the probability that the format is \texttt{dd/mm/yyyy} as opposed to \texttt{mm/dd/yyyy}.
+The CKY parser is run over the same set of samples from each validation file to generate a probabilistic distribution of possible parse trees corresponding to a set of date-time patterns. As a second pass of the parser, starting from the most probable parse tree, each parse tree is then applied to the entire file's columnar data to determine the dominant pattern. For example, another entry in the same dataset could be \texttt{`25/3/2007'} thus increasing the probability that the format is \texttt{dd/mm/yyyy} as opposed to \texttt{mm/dd/yyyy}.
 
 In addition to the  columnar data context, the locale is are also used to help maximize the probabilistic likelihood of a particular date-time pattern. The locale of the data column is used to retrieve the corresponding corpora for helping with the parsing and for correcting syntactical errors. However, similar to the locale sensitivity issue described in Section 4.6, the locale and the data may not always match. The dominant pattern is simply computed over the data column based on the ranked set of parse tree results.
