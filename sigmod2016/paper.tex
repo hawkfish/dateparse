@@ -1,0 +1,131 @@
+% THIS IS SIGPROC-SP.TEX - VERSION 3.1
+% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
+% APRIL 2009
+%
+% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
+% LaTeX2e document class file for Conference Proceedings submissions.
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) Page numbering
+% ---------------------------------------------------------------------------------------------------------------
+% It is an example which *does* use the .bib file (from which the .bbl file
+% is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission,
+% you need to 'insert'  your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% Questions regarding SIGS should be sent to
+% Adrienne Griscti ---> griscti@acm.org
+%
+% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
+% Gerald Murray ---> murray@hq.acm.org
+%
+% For tracking purposes - this is V3.1SP - APRIL 2009
+
+\documentclass{acm_proc_article-sp}
+%
+\usepackage{url}
+\usepackage{syntax}
+\usepackage{amsmath}% http://ctan.org/pkg/amsmath
+\usepackage{mathtools}
+\usepackage{color}
+
+
+%
+\def\sharedaffiliation{%
+\end{tabular}
+\begin{tabular}{c}}
+%
+\def\eg{\textit{e.g.} }
+\def\ie{\textit{i.e.} }
+\def\dateparse{\texttt{DATEPARSE}}
+\hyphenation{time-stamp}
+
+
+% to add comments
+\newcommand{\vidya}[1]{\textcolor{red}{(vidya: #1)}}
+
+% formatting math symbols
+\newcommand{\Mod}[1]{\ (\text{mod}\ #1)}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+% tightening the whitespace for itemize
+\newenvironment{tight_itemize}{\begin{itemize} \itemsep
+-2pt}{\end{itemize}}
+
+%
+\begin{document}
+
+\conferenceinfo{SIGMOD}{'16 SanFrancisco, CA USA}
+
+\title{Does Anybody Really Know What Time It Is?\\
+Automating the Extraction of Date Scalars}
+\input{anonymous}
+
+\maketitle
+\begin{abstract}
+With the advent of modern data visualization tools, data preparation has become a bottleneck for analytic workflows. Users who are already engaged in data analysis prefer to stay in the visualization environment for cleaning and preparation tasks whenever possible, both to preserve analytic flow and to take advantage of the visualization environment to spot inconsistent data. This has led many visualization environments to include simple data preparation functions such as scalar parsing, pattern matching and categorical binning in their analytic toolkits. 
+
+One of the most common scalar parsing tasks is extracting date and time data from string representations. Several RDBMSes include date parsing ``mini-languages'' to cover the wide range of possible formats. Analysis of the usage of such functions in one visualization system shows, however, that the date parsing language syntax is difficult for users to master. 
+
+In this paper, we present two algorithms for automatically deriving date format strings from a column of data, one based on minimum entropy and one based on natural language modeling. Both have similar accuracies of over 90\% on a large corpus of date columns extracted from an online data repository and are in substantial agreement with each other. The minimal entropy approach is also fast enough to produce results within the user's perceptual threshold, making it suitable for interactive work.
+\end{abstract}
+
+%D.3.3 [Data Processing]: Data Cleaning, Natural Language Processing.
+% A category with the (minimum) three required fields
+\category{D.3.3}{Data Processing}{Data Cleaning, Natural Language Processing}
+%A category including the fourth, optional field follows...
+%\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
+
+\terms{Algorithms, Performance}
+
+\section{Introduction}
+\input{intro}
+
+\section{Related Work}
+\input{relatedwork}
+
+\section{Parameters}
+\input{parameters}\\\\
+
+\section{Minimal Descriptive Length}
+\input{mdl}
+
+\section{Natural Language Processing}
+\input{nlp}
+
+\section{Testing}
+\input{testing}
+
+\section{Future Work}
+\input{futurework}
+
+\section{Conclusion}
+\input{conclusion}
+
+%ACKNOWLEDGMENTS are optional
+\section{Acknowledgments}
+\input{credits}
+
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{dateparse}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ``.bib'' file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+
+\balancecolumns
+% That's all folks!
+\end{document}
