@@ -26,7 +26,8 @@
 %
 % For tracking purposes - this is V3.1SP - APRIL 2009
 
-\documentclass{acm_proc_article-sp}
+%\documentclass{acm_proc_article-sp}
+\documentclass[conference]{IEEEtran}
 %
 \usepackage{url}
 \usepackage{syntax}
@@ -61,11 +62,28 @@
 %
 \begin{document}
 
-\conferenceinfo{SIGMOD}{'16 SanFrancisco, CA USA}
 
 \title{Does Anybody Really Know What Time It Is?\\
 Automating the Extraction of Date Scalars}
-\input{anonymous}
+%\input{anonymous}
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+%\author{\IEEEauthorblockN{Michael Shell}
+%\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
+%Georgia Institute of Technology\\
+%Atlanta, Georgia 30332--0250\\
+%Email: http://www.michaelshell.org/contact.html}
+%\and
+%\IEEEauthorblockN{Homer Simpson}
+%\IEEEauthorblockA{Twentieth Century Fox\\
+%Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\and
+%\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
+%\IEEEauthorblockA{Starfleet Academy\\
+%San Francisco, California 96678-2391\\
+%}}
 
 \maketitle
 \begin{abstract}
@@ -76,13 +94,14 @@ One of the most common scalar parsing tasks is extracting date and time data fro
 In this paper, we present two algorithms for automatically deriving date format strings from a column of data, one based on minimum entropy and one based on natural language modeling. Both have similar accuracies of over 90\% on a large corpus of date columns extracted from an online data repository and are in substantial agreement with each other. The minimal entropy approach is also fast enough to produce results within the user's perceptual threshold, making it suitable for interactive work.
 \end{abstract}
 
+\vidya{Need to figure out the IEEE equivalent for categories and terms}
 %D.3.3 [Data Processing]: Data Cleaning, Natural Language Processing.
 % A category with the (minimum) three required fields
-\category{D.3.3}{Data Processing}{Data Cleaning, Natural Language Processing}
+%\category{D.3.3}{Data Processing}{Data Cleaning, Natural Language Processing}
 %A category including the fourth, optional field follows...
 %\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
 
-\terms{Algorithms, Performance}
+%\terms{Algorithms, Performance}
 
 \section{Introduction}
 \input{intro}
@@ -116,7 +135,7 @@ In this paper, we present two algorithms for automatically deriving date format 
 % The following two commands are all you need in the
 % initial runs of your .tex file to
 % produce the bibliography for the citations in your paper.
-\bibliographystyle{abbrv}
+\bibliographystyle{IEEEtran}
 \bibliography{dateparse}  % sigproc.bib is the name of the Bibliography in this case
 % You must have a proper ``.bib'' file
 %  and remember to run:
@@ -126,6 +145,6 @@ In this paper, we present two algorithms for automatically deriving date format 
 % ACM needs 'a single self-contained file'!
 %
 
-\balancecolumns
+%\balancecolumns
 % That's all folks!
 \end{document}
