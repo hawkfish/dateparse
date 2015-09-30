@@ -1,26 +1,76 @@
-Before delving into detailed descriptions of the two algorithms, we describe the common elements of the problem they are intended to solve. These are the input data, the output language and the interpretation of the output language for partial dates.
-
-\subsection{Input Data}
-The primary assumption of the algorithms is that we have a column of string values that the user has indicated are really date scalars. The strings may also be in a non-English language, so we also extract the string collation from the column metadata and provide it as an optional secondary input.
-
 \subsection{The ICU Date Format Language}
-The date format syntax we selected is the one provided by the ICU open-source project. We chose it because we were already using ICU in the code base, we had access to the source code, and it provides localized date part data for a large number of languages.
+The choice of a date format syntax for generation is somewhat arbitrary, but for the purposes of exposition we will be using the ICU Date Format Language. Other syntaxes can be generated directly from the algorithms, or by translating the ICU syntax into 
 
-The syntax is documented at the ICU web site~\cite{ICU}. While fairly complete, it has a few limitations that we ran into when evaluating the algorithms:
+The date format syntax we selected for generation is the one provided by the ICU open-source project. We chose it because we were already using ICU in the code base, we had access to the source code, and it provides localized date part data for a large number of languages. 
+
+ICU's format syntax is typical of most syntax languages and provides a large number of codes, and a summary of it is reproduced in Table 2.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{0.2\linewidth}| p{0.6\linewidth}|}
+\hline
+\centering
+\textbf{ICU Code} & \textbf{Interpretation}\\ \hline
+
+\scriptsize{yy} & \scriptsize{year (96)}\\ \hline
+\scriptsize{yyyy} & \scriptsize{year (1996)}\\ \hline
+    
+\scriptsize{QQ} & \scriptsize{quarter (02)}\\ \hline
+\scriptsize{QQQ} & \scriptsize{quarter (Q2)}\\ \hline
+\scriptsize{QQQQ} & \scriptsize{quarter (2nd quarter)}\\ \hline
+    
+\scriptsize{MM} & \scriptsize{month in year (09)}\\ \hline
+\scriptsize{MMM} & \scriptsize{month in year (Sept)}\\ \hline
+\scriptsize{MMMM} & \scriptsize{month in year (September)}\\ \hline
+    
+\scriptsize{d} & \scriptsize{day in month (2)}\\ \hline
+\scriptsize{dd} & \scriptsize{day in month (02)}\\ \hline
+    
+\scriptsize{EEE} & \scriptsize{day of week (Tues)}\\ \hline
+\scriptsize{EEEE} & \scriptsize{day of week (Tuesday)}\\ \hline
+    
+\scriptsize{a} & \scriptsize{am/pm marker (pm)}\\ \hline
+    
+\scriptsize{h} & \scriptsize{hour in am/pm 1:12 (7)}\\ \hline
+\scriptsize{hh} & \scriptsize{hour in am/pm 1:12 (07)}\\ \hline
+    
+\scriptsize{H} & \scriptsize{hour in day 0:23 (0)}\\ \hline
+\scriptsize{HH} & \scriptsize{hour in day 0:23 (00)}\\ \hline
+    
+\scriptsize{m} & \scriptsize{minute in hour (4)}\\ \hline
+\scriptsize{mm} & \scriptsize{minute in hour (04)}\\ \hline
+    
+\scriptsize{s} & \scriptsize{second in minute (5)}\\ \hline
+\scriptsize{ss} & \scriptsize{second in minute (05)}\\ \hline
+    
+\scriptsize{S} & \scriptsize{millisecond (2)}\\ \hline
+\scriptsize{SS} & \scriptsize{millisecond (23)}\\ \hline
+\scriptsize{SSS} & \scriptsize{millisecond (235)}\\ \hline
+    
+\scriptsize{Z} & \scriptsize{Time Zone: RFC 822 (-0800)}\\ \hline
+\scriptsize{ZZ} & \scriptsize{Time Zone: RFC 822 (-0800)}\\ \hline
+\scriptsize{ZZZ} & \scriptsize{Time Zone: RFC 822 (-0800)}\\ \hline
+\scriptsize{ZZZZ} & \scriptsize{Time Zone: localized GMT (GMT-08:00)}\\ \hline
+\scriptsize{ZZZZZ} & \scriptsize{Time Zone: ISO8601 (-08:00)}\\ \hline
+    
+\scriptsize{'} & \scriptsize{escape for text (nothing)}\\ \hline
+\scriptsize{''} & \scriptsize{two single quotes produce one (')}\\ \hline
+
+\end{tabular}
+\label{tab:icuformats} \\
+\caption{ICU Format Codes.}
+\end{table}
+
+The complete syntax is documented at the ICU web site~\cite{ICU}. 
+
+While fairly extensive, the ICU syntax has a few limitations that we ran into when working with real-world data:
 \begin{itemize}
-\item No support for 4 letter year abbreviations (\eg \texttt{Sept.})
+\item No support for 4 letter month abbreviations (\eg \texttt{Sept.})
 \item No support for ordinal days (\eg \texttt{July 4th})
 \item No support for quarter postfix notation (\eg \texttt{2Q})
 \item No support for variant meridian markers (\eg \texttt{a.m.})
 \end{itemize}
 
-These limitations did not affect the results significantly, and in the future we hope to submit ICU extensions to handle some of these issues.
+These limitations did not affect the results significantly, and in the future we hope to submit ICU extensions to handle some of these issues. Moreover, all the languages we examined had their own limitations, so ICU is not unusual in this respect.
 
-One other quirk of the ICU syntax may be a contributing factor to the user confusion around writing correct ICU date formats. The use of lexicographical case in the meta-symbols of the format language can be confusing (\eg \texttt{y} is used for years, but \texttt{M} is used for months while \texttt{m} is used for minutes.) Another advantage of an automated algorithm is that it hides such problems from most users, significantly improving the usability of the function.
-
-\subsection{Partial Dates}
-Many of the date formats that we encountered were incomplete dates, which necessitated creating rules for what date scalar they represented.
-
-ICU's date parsing APIs allow the specification of default values for parts when a format does not contain them. In our implementation, all time fields are set to \texttt{0} (midnight) and the date fields are set based on whether the format contains any date part specifications. When date parts are present, we use \texttt{2000-01-01} as the set of default date parts as it is the start of a leap year. When dealing with pure time formats, we model the output as a date/time and use \texttt{1899-12-30} for the date parts.
-
-ICU will also parse Time Zones (which the algorithms recognize but the visualization system does not model) and Quarters (which we interpret as the first month of the period.) RDBMSes such as Oracle and Postgres that support time zones will be able to take advantage of  identified time zone fields.
+One other quirk of the ICU syntax may be a contributing factor to the user confusion around writing correct ICU date formats in the existing visualisation system. The use of lexicographical case in the meta-symbols of the format language can be confusing (\eg \texttt{y} is used for years, but \texttt{M} is used for months while \texttt{m} is used for minutes. A better design would have made case more consistent within dates and times. Another advantage of automated syntax generation is that it hides such problems from most users, significantly improving the usability of the function.
