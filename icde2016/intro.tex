@@ -1,15 +1,17 @@
-In recent years, there has been a growth of interest in data visualization technologies for human-assisted data analysis using systems such as Polaris~\cite{Stolte:2008} and Spotfire~\cite{Ahlberg:1996}. While computers can provide high-speed and high-volume data processing, humans have domain knowledge and the ability to process data in parallel, notably by using our visual systems. Humans also provide the definition of what is valuable in an analysis. Accordingly, human/computer analytic systems are essential to extracting knowledge of value to humans and their societies from the large amounts of data being generated today.
+In recent years, there has been a growth of interest in data visualization technologies for human-assisted data analysis using systems such as Polaris~\cite{Stolte:2008} and Spotfire~\cite{Ahlberg:1996}. While computers can provide high-speed and high-volume data processing, humans have both domain knowledge and the ability to process data in parallel by using our visual systems. Humans also provide the definition of what is valuable in an analysis. Accordingly, hybrid human/computer analytic systems are essential to extracting knowledge of value to humans and their societies from the large amounts of data being generated today.
 
 \subsection{Interactivity}
-Visualization systems are most effective when they are interactive, thereby allowing a user to explore data and connect it to their domain knowledge and sense of what is important without breaking cognitive flow. In recent years, a number of such systems have been developed, both by the academic community and by the commercial sector. Exploration of data consists not only in creating visual displays, but also in creating and modifying domain-specific computations. Consequently, most data visualization systems include facilities for defining such calculations as part of the data model being analyzed. The most effective systems allow users to define these calculations as part of the analytic interaction, which permits the user to stay in the flow of analysis~\cite{Morton:2012}.
+Visualization systems are most effective when they are interactive, thereby allowing a user to explore data and connect it to their domain knowledge and sense of what is important without breaking cognitive flow. In recent years, a number of such systems have been developed, both by the academic community and by the commercial sector. Exploration of data consists not only in creating visual displays, but also in creating and modifying domain-specific computations in the data model, and most data visualization systems include facilities for defining such calculations. The most effective systems allow users to define these calculations as part of the analytic interaction, which permits the user to stay in the flow of analysis~\cite{Morton:2012}.
 
 During the analytic process, a user may discover that parts of the data are not yet suitable for analysis. Solutions to this problem are often provided by data preparation tools external to the visual analysis environment, which requires the user to break their cognitive flow, launch another tool and reprocess their data before returning to their analysis. If the user does not own this process (\eg it is the responsibility of another department), then there can be significant delays (including ``never.'') More subtly, the result of updated external processing may not be compatible with the user's existing work, which can lead to more time lost reconciling the new data model with the existing analysis.
 
-From the user's perspective, the boundary between preparation and analysis is not nearly so clean cut. Bad data is often discovered using visual analysis techniques (e.g. histograms or scatter plots) and it is most natural for the user to ``clean what she sees'' instead of switching to a second tool. This leads to an ``adaptive'' process whereby users will prefer leveraging existing tools in the analytics environment (no matter how poorly they may be suited to the task) over switching to another application. Thus a well-designed interactive visual analysis environment will provide tools that enable users to perform such cleaning tasks as interactively as possible.
+From the user's perspective, the boundary between preparation and analysis is not nearly so clean cut. Bad data is often discovered using visual analysis techniques (e.g. histograms or scatter plots) and it is most natural for the user to ``clean what she sees'' instead of switching to a second tool. This leads to an ``adaptive'' process whereby users will prefer leveraging existing tools in the analytics environment over switching to another application -- no matter how poorly these tools may be suited to the task. Thus a well-designed interactive visual analysis environment will provide effective tools that enable users to perform such cleaning and preparation tasks as interactively as possible.
 
 \subsection{Scalar Dates}
 
-The SQL-99 standard defines three temporal scalar types: \texttt{DATE}, \texttt{TIMESTAMP} and \texttt{TIME}, which can be further qualified as either \texttt{WITH} or \texttt{WITHOUT} \texttt{TIME ZONE} (the \texttt{WITHOUT} form being more common.) They are typically implemented as fixed-point types containing an offset from some epoch (\eg Julian Days.) This makes them compact to store using column store compression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, and further allows some temporal operations to be implemented very efficiently using simple arithmetic. Thus from the RDBMS perspective, representing dates in scalar form provides  benefits for users, both in terms of available operations and query performance.
+One of the most common data preparation tasks we see users performing is the parsing of date strings into scalar date representations, and streamlining this process is the focus of this paper. We now provide some background on the use of dates in data analytics to provide context for the problem. 
+
+The SQL-99 standard defines three temporal scalar types: \texttt{DATE}, \texttt{TIMESTAMP} and \texttt{TIME}, which can be further qualified as either \texttt{WITH} or \texttt{WITHOUT} \texttt{TIME ZONE} (the \texttt{WITHOUT} form being more common.) They are typically implemented as fixed-point types containing an offset from some epoch (\eg Julian Days.) This makes them compact to store using column store compression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, and further allows some temporal operations to be implemented very efficiently using simple arithmetic. Thus from the RDBMS perspective, representing dates in scalar form provides  benefits for users, both in terms of analytic operations and query performance.
 
 Our visualization system models the first two of these SQL-99 types natively; the third (pure time) is folded into \texttt{TIMESTAMP} by appending it to a fixed date of \texttt{1899-12-30} (a convention derived from Microsoft Excel). From the analytic perspective, date types are dimensional (\ie independent variables) and can be used as either \textit{categorical} (simply ordered) or \textit{quantitative} (ordered with a distance metric) fields.
 
@@ -22,7 +24,7 @@ Categorical dates have a natural hierarchy associated with them generated by cal
 \label{fig:I1}
 \end{figure}
 
-Quantitative dates are typically used for time series on an axis that maps the underlying distance measure to display pixel distance. The quantitative analog to categorical binning is \textit{truncation} whereby all the dates in a bin are represented by the first date in the bin. Truncation accurately preserves the distance semantics while enabling roll-up to coarser levels of detail. The visualization in Figure \ref{fig:I2} shows the same sales data in a time series rolled up to the quarter level.
+Quantitative dates are typically used for time series on an axis that maps the underlying distance measure to display pixel distance. The quantitative analog to categorical binning is \textit{truncation} whereby all the dates in a bin are represented by the first date in the bin. Truncation accurately preserves the distance semantics while enabling roll-up to coarser levels of detail. The visualization in Figure \ref{fig:I2} shows the same sales data in a quantitative time series rolled up to the quarter level.
 
 \begin{figure}[ht]
 \centering
@@ -31,7 +33,7 @@ Quantitative dates are typically used for time series on an axis that maps the u
 \label{fig:I2}
 \end{figure}
 
-These types of visualizations are difficult to specify with simple categorical string representations of dates. Thus the parsing of strings to date scalars is an important form of data modeling for analytics.
+These types of visualizations are difficult to specify with simple categorical string representations of dates. Thus the parsing of strings to date scalars is an important form of preparation for data analytics.
 
 \subsection{Parsing Dates}
 This parsing of date representations is one of the oldest data preparation problems we have observed. A common version of this problem is how to convert columns of integers of the form \texttt{yyyyMMdd} to date scalars. Na\"{i}ve users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date. Unfortunately, this approach has a number of problems:
@@ -41,7 +43,7 @@ This parsing of date representations is one of the oldest data preparation probl
 \item The parsing code is hard to understand and maintain because it uses a verbose, general-purpose string-handling syntax instead of a specialized domain language.
 \end{itemize}
 
-And this is but a single date format. Our studies of online data collections suggest that there are hundreds of distinct temporal date formats in user data sets. Some are common, but others can be quite idiosyncratic. Table 1 shows a selection of unusual date formats found in our corpus. The first example shows a time zone in the middle of the date and a year after the time; the second shows a leading unmatched bracket and a colon between the date and time components; the third shows confusion between the seconds' decimal point and the time part delimiter; the fourth shows a two digit year apostrophe on a four digit year and the fifth shows a dash separating the date and time components.
+And this is but a single date format. Our studies of online data collections suggest that there are hundreds of distinct temporal date formats in user data sets. Some are common, but others can be quite idiosyncratic. Table 1 shows a selection of unusual date formats found in our corpus (the meanings of the ICU formatting codes can be found in Table 2). The first example shows a time zone in the middle of the date and a year after the time; the second shows a leading unmatched bracket and a colon between the date and time components; the third shows confusion between the seconds' decimal point and the time part delimiter; the fourth shows a two digit year apostrophe on a four digit year and the fifth shows a dash separating the date and time components.
 
 \begin{table}[ht]
 \centering
@@ -65,13 +67,14 @@ Several RDBMSes (\eg MySQL, Oracle and Postgres) provide row-level functions for
 One solution to this problem might have been to design a graphical environment that enabled users to construct valid patterns using visually compelling representations to reduce the cognitive load. This approach would have involved a substantial development effort with no guarantee that the result would be correct if the user misunderstood the environment. Moreover, this approach only solves the syntax problem -- the user is still required to switch contexts to solve their problem.
 
 \subsection{Contributions}
-Our solution was to develop two machine learning algorithms for automatically deriving the format string from the user's data with over 95\% parsing accuracy. This approach allows the user to simply specify "this column is a date" and the visualisation system can respond quickly and accurately enough to avoid interrupting the user's cognitive flow.
+Our solution was to develop two machine learning algorithms for automatically deriving the format string from the user's data with over 95\% parsing accuracy. This approach allows the user to simply specify "this column is a date" and the visualization system can respond quickly and accurately enough to avoid interrupting the user's cognitive flow.
 
 Specifically, our contributions include:
 
 \begin{itemize}
-\item Quantification of the surprising variety of date formats in use;
-\item Descriptions of two algorithms for automating date format extraction, at least one of which is performant enough for interactive use;
+\item A qualitative description of the surprising variety of date formats in use;
+\item Two algorithms for automating date format extraction, at least one of which is performant enough for interactive use;
+\item Several performance enhancements for Minimum Descriptive Length structure pruning;
 \item Demonstration of an effective approach for integrating data cleaning into analytic workflows.
 \end{itemize}
 
