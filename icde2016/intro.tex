@@ -55,7 +55,7 @@ And this is but a single date format. Our studies of online data collections sug
 \scriptsize{EEE MMM dd HH:mm:ss zzz yyyy} & \scriptsize{Fri Apr 01 02:09:27 EDT 2011}\\ \hline
 \scriptsize{[dd/MMM/yyyy:HH:mm:ss} & \scriptsize{[10/Aug/2014:09:30:40}\\ \hline
 \scriptsize{dd-MMM-yy hh.mm.ss.SSSSSS a} & \scriptsize{01-OCT-13 01.09.00.000000 PM}\\ \hline
-\scriptsize{MM 'yyyy} & \scriptsize{01 '2013}\\ \hline
+\scriptsize{MM ''yyyy} & \scriptsize{01 '2013}\\ \hline
 \scriptsize{MM/dd/yyyy - HH:mm} & \scriptsize{04/09/2014 - 23:47}\\ \hline
 \end{tabular}
 \label{tab:dateformats}
@@ -66,17 +66,18 @@ Several RDBMSes (\eg MySQL, Oracle and Postgres) provide row-level functions for
 
 One solution to this problem might have been to design a graphical environment that enabled users to construct valid patterns using visually compelling representations to reduce the cognitive load. This approach would have involved a substantial development effort with no guarantee that the result would be correct if the user misunderstood the environment. Moreover, this approach only solves the syntax problem -- the user is still required to switch contexts to solve their problem.
 
-\subsection{Contributions}
 Our solution was to develop two machine learning algorithms for automatically deriving the format string from the user's data with over 95\% parsing accuracy. This approach allows the user to simply specify "this column is a date" and the visualization system can respond quickly and accurately enough to avoid interrupting the user's cognitive flow.
+
+\subsection{Contributions}
 
 Specifically, our contributions include:
 
 \begin{itemize}
-\item A qualitative description of the surprising variety of date formats in use;
-\item Two algorithms for automating date format extraction, at least one of which is performant enough for interactive use;
-\item Several performance enhancements for Minimum Descriptive Length structure pruning;
-\item Demonstration of an effective approach for integrating data cleaning into analytic workflows.
+\item By analyzing an on line corpus, we provide evidence that practical date parsing requires the ability to recognize hundreds of formats;
+\item We show how to extend prior work on Minimum Descriptive Length structure extraction to generate a freely available date format domain language with over 95\% accuracy;
+\item We describe a second Natural Language Processing technique for generating the same date format domain language with similar accuracy. We describe how the basic algorithm is extended to support grammar variants and constraints unique to date formats. The parsing algorithm is extended to compute an overall dominant pattern over a data column;
+\item We describe some limitations of this domain language that would improve its utility.
 \end{itemize}
 
 \subsection{Organization}
-The rest of this paper is organized as follows: The next section provides background information for the problem space. The following two sections describe the two different algorithms, one using Minimum Descriptive Length and the other using Natural Language Processing. In section 6, we evaluate the algorithms on a corpus of 30K columns, both by sampling the outputs manually and then by using the algorithms to validate each other. We then discuss future work in section 7 and conclude in section 8.
+The rest of this paper is organized as follows: The next section provides background information for the problem space. The following two sections describe the two different algorithms, one using Minimum Descriptive Length and the other using Natural Language Processing. In section V, we evaluate the algorithms on a corpus of 30K columns, both by sampling the outputs manually and then by using the algorithms to validate each other. We then discuss related work in section VI, future work in section VII and conclude in section VIII.
