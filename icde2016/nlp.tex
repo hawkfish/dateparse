@@ -119,11 +119,15 @@ The production rules are of the form $ X \rightarrow \beta$ where $X$ is the lef
 
 Given a CFG grammar $G$, we define  $\tau_G(s)$ as the set of all possible parse trees for input date-time string $s$.  For any $X \rightarrow \beta \in \tau(G)$, the probability $p(X \rightarrow \beta) \ge 1$. In addition, $\sum_{(X \rightarrow \beta) \in \tau_{G}} = 1$. The parser then chooses the parse tree with the maximum probability, \textit{i.e.} given a date-time string $s$, as input, we determine the highest scoring parse tree $X \rightarrow \beta$ as  $max_{(X \rightarrow \beta) \in \tau(s)} p(X \rightarrow \beta)$.
 
-In order to bootstrap the probability weights in the \texttt{PCFG}, we manually set initial probability weights to various rules in the grammar as follows:
+
+Assigning initial probability weights to the grammar for computing the parse with the highest weight, tends to be a more scalable and flexible approach to disambiguation rather than building a deep knowledge ontology. We bootstrap the probability weights in the \texttt{PCFG}, by setting initial probability weights to various rules in the grammar as follows:
+
 \begin{itemize}
 \item Similar to the MDL ranking properties described in Section 3.7, rules involving the non-terminal \texttt{DateGrammar} on the left-side of the rule, are assigned probability weights higher than those rules with the non-terminal being \texttt{TimeGrammar}. In practice, assigning $p(\texttt{DateGrammar} \rightarrow \beta_{1}) = 0.9$ and $p(\texttt{TimeGrammar} \rightarrow \beta_{2}) = 0.7$ leads to optimal ranking of the parse trees.
 
 \item For the non-terminal symbol \texttt{Day}, the constraint specified is a range between 01 and 28-31, depending on month/year. However, for \texttt{dd} $> 12$, $p(\texttt{Day} \rightarrow d d) = 1.0$, and $0.5$ otherwise. This assignment helps disambiguate days from months.
+
+
 
 
 \end{itemize}
