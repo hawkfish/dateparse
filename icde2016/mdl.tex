@@ -33,9 +33,9 @@ A difficulty in using this kind of structure extraction is that the algorithm fo
 Structure enumeration is computationally expensive, so we added a number of enhancements to the original domain extraction algorithm to keep the run time low enough for interactivity.
 
 \subsubsection{Domain Characteristics}
-Date domains typically have small widths, so we found it advantageous to provide the shortest and longest match sizes for use in structure enumeration and matching.
+Date domains typically have small widths, so we found it advantageous to provide the shortest and longest match sizes for use in structure enumeration and matching. For example, months have between $1$ and $2$ digits, so there is no need to test matches whose length is outside this range.
 
-Date domains are also often uniform in that adding more characters to a mismatch will not help. For example, a 2-digit day domain that does not match a 1-letter substring will not be able to generate a match by adding more characters.
+Date domains are also often uniform in that adding more characters to a mismatch will not help. For example, a $2$-digit day domain that does not match a $1$-letter substring will not be able to generate a match by adding more characters.
 
 \subsubsection{Parallel Evaluation}
 We have also identified two opportunities for parallel computation during structure enumeration.
@@ -53,7 +53,7 @@ The pruning rules used for the structure extraction reduce the search space dram
 \item The set of date parts cannot contain place value gaps (\eg structures that have year and day without month are removed.)
 \item Similarly, the set of time parts cannot contain place value gaps and must also be in place value order (times are never written in orders such as \texttt{mhs}.)
 \item The existence of time parts cannot make dates incomplete (\eg patterns like year-day-hour are removed.)
-\item Two digit years require special handling. In particular, they cannot appear adjacent to a two-digit field if the structure contains punctuation. (This can come up in some small early 21st century year domains where a two-digit year can masquerade as almost any numeric field.)
+\item Two digit years require special handling. In particular, they cannot appear adjacent to a two-digit field if the structure contains punctuation. (This can come up in some small early 21st century year domains where a two-digit year can masquerade as almost any numeric field \eg $08$ for $2008$.)
 \end{itemize}
 
 These global pruning rules are simple and intuitive, but are essential to further reducing the search space.
@@ -70,7 +70,7 @@ MDL structure analysis naturally produces a ranked list of format candidates, bu
 \begin{itemize}
 \item Because we have a set of samples, we can apply the candidate format to the strings to see how well it performs. Formats with fewer parse errors are preferred.
 \item Date parts can be considered a place-value system, so we prefer ``more significant'' components (\eg month-day-year over hour-minute-second).
-\item If two formats from different locales give the same results, prefer the original column locale. The sample set may have missed an example where this could be important.
+\item If two formats from different locales give the same results, prefer the original column locale. The sample set may have missed an example where this could be important. For example, the month name for "September" is the same in both German and English, but "October" and "Oktober" are different.
 \item If the format has an ambiguous date order (\eg all days are less than 12), then prefer the default date order of the locale. Again, the sample set may have missed a counterexample, so this is the best option.
 \item Once these semantic preferences have been considered, we then prefer the more compact (MDL) representation.
 \end{itemize}
