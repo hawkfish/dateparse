@@ -39,7 +39,7 @@
 
 \def\eg{\textit{e.g.} }
 \def\ie{\textit{i.e.} }
-\def\dateparse{\texttt{DATEPARSE}}
+\def\dateparse{\mbox{\texttt{DATEPARSE}}}
 \hyphenation{time-stamp}
 
 
@@ -47,6 +47,7 @@
 \newcommand{\vidya}[1]{\textcolor{red}{(vidya: #1)}}
 \newcommand{\richard}[1]{\textcolor{green}{(richard: #1)}}
 \newcommand{\dan}[1]{\textcolor{blue}{(dan: #1)}}
+\newcommand\functionname[1]{\mbox{\texttt{#1}}}
 
 % formatting math symbols
 \newcommand{\Mod}[1]{\ (\text{mod}\ #1)}
@@ -132,7 +133,7 @@ In this paper, we present two algorithms for automatically deriving these date f
 % The following two commands are all you need in the
 % initial runs of your .tex file to
 % produce the bibliography for the citations in your paper.
-\IEEEtriggeratref{13}
+\IEEEtriggeratref{9}
 \bibliographystyle{IEEEtran}
 \bibliography{dateparse}  % sigproc.bib is the name of the Bibliography in this case
 % You must have a proper ``.bib'' file
