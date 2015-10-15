@@ -10,7 +10,7 @@ From the user's perspective, the boundary between preparation and analysis is no
 
 \subsection{Scalar Dates}
 
-One of the most common data preparation tasks we see users performing is the parsing of date strings into scalar date representations, and streamlining this process is the focus of this paper \vidya{do we have any data to backup this?}. We now provide some background on the use of dates in data analytics to provide context for the problem. 
+One of the most common data preparation tasks we see users performing is the parsing of date strings into scalar date representations, and streamlining this process is the focus of this paper \vidya{do we have any data to backup this?}\richard{Yes, I think Dan has some}. We now provide some background on the use of dates in data analytics to provide context for the problem. 
 
 The SQL-99 standard defines three temporal scalar types: \texttt{DATE}, \texttt{TIMESTAMP} and \texttt{TIME}, which can be further qualified as either \texttt{WITH} or \texttt{WITHOUT} \texttt{TIME ZONE} (the \texttt{WITHOUT} form being more common.) They are typically implemented as fixed-point types containing an offset from some epoch (\eg Julian Days.) This makes them compact to store using column store compression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, and further allows some temporal operations to be implemented very efficiently using simple arithmetic. Thus from the RDBMS perspective, representing dates in scalar form provides  benefits for users, both in terms of analytic operations and query performance.
 
@@ -69,16 +69,16 @@ Several RDBMSes (\eg MySQL, Oracle and Postgres) provide row-level functions for
 
 One solution to this problem might have been to design a graphical environment that enabled users to construct valid patterns using visually compelling representations to reduce the cognitive load. This approach would have involved a substantial development effort with no guarantee that the result would be correct if the user misunderstood the environment. Moreover, this approach only solves the syntax problem -- the user is still required to switch contexts to solve their problem.
 
-Our solution was to develop two machine learning algorithms for automatically deriving the format string from the user's data with over 95\% parsing accuracy \vidya{we need to mention why we chose to develop two separate algorithms. One reason being for cross-validation over a large set of output results from each}. This approach allows the user to simply specify ``this column is a date" and the visualization system can respond quickly and accurately enough to avoid interrupting the user's cognitive flow.
+Our solution was to develop two machine learning algorithms for automatically deriving the format string from the user's data with over 95\% parsing accuracy. We developed two algorithms because we were not aware of any previous work on this problem and we needed to be able to cross-validate our results on a large testing corpus. Either approach allows the user to simply specify ``this column is a date" and the visualization system can respond quickly and accurately enough to avoid interrupting the user's cognitive flow.
 
 \subsection{Contributions}
 
 Specifically, our contributions include:
-\vidya{also good to mention that we are able to parse many different formats and provide a unique approach to cross-validate the the parsing accuracy by developing two independent and different algorithms}
 \begin{itemize}
 \item By analyzing an online corpus, we provide evidence that practical date parsing requires the ability to recognize hundreds of formats;
 \item We show how to extend prior work on Minimum Descriptive Length structure extraction to generate a freely available date format domain language with over 95\% accuracy;
 \item We describe a second Natural Language Processing technique for generating the same date format domain language with similar accuracy. We describe how the basic algorithm is extended to support grammar variants and constraints unique to date formats. The parsing algorithm is extended to compute an overall dominant pattern over a data column;
+\item We provide evidence that the development of multiple, independent parsing algorithms provides an effective means of cross-validation on large corpi;
 \item We describe some limitations of this domain language that would improve its utility.
 \end{itemize}
 
