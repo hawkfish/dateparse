@@ -1,4 +1,4 @@
-In recent years, there has been a growth of interest in data visualization technologies for human-assisted data analysis using systems such as Polaris~\cite{Stolte:2008} and Spotfire~\cite{Ahlberg:1996}. While computers can provide high-speed and high-volume data processing, humans have both domain knowledge and the ability to process data in parallel by using our visual systems. Humans also provide the definition of what is valuable in an analysis. Accordingly, hybrid human/computer analytic systems are essential to extracting knowledge of value to humans and their societies from the large amounts of data being generated today.
+In recent years, there has been a growth of interest in data visualization technologies for human-assisted data analysis using systems such as Polaris~\cite{Stolte:2008} and Spotfire~\cite{Ahlberg:1996}. While computers can provide high-speed and high-volume data processing, humans have both domain knowledge and the ability to process data in parallel by using our visual systems \vidya{need some references - perhaps Bill Cleveland's work or Jock's book}. Humans also provide the definition of what is valuable in an analysis. \vidya{Don`t really understand the point of this sentence:}Accordingly, hybrid human/computer analytic systems are essential to extracting knowledge of value to humans and their societies from the large amounts of data being generated today.
 
 \subsection{Interactivity}
 Visualization systems are most effective when they are interactive, thereby allowing a user to explore data and connect it to their domain knowledge and sense of what is important without breaking cognitive flow. In recent years, a number of such systems have been developed, both by the academic community and by the commercial sector. Exploration of data consists not only in creating visual displays, but also in creating and modifying domain-specific computations in the data model, and most data visualization systems include facilities for defining such calculations. The most effective systems allow users to define these calculations as part of the analytic interaction, which permits the user to stay in the flow of analysis~\cite{Morton:2012}.
@@ -9,7 +9,7 @@ From the user's perspective, the boundary between preparation and analysis is no
 
 \subsection{Scalar Dates}
 
-One of the most common data preparation tasks we see users performing is the parsing of date strings into scalar date representations, and streamlining this process is the focus of this paper. We now provide some background on the use of dates in data analytics to provide context for the problem. 
+One of the most common data preparation tasks we see users performing is the parsing of date strings into scalar date representations, and streamlining this process is the focus of this paper \vidya{do we have any data to backup this?}. We now provide some background on the use of dates in data analytics to provide context for the problem. 
 
 The SQL-99 standard defines three temporal scalar types: \texttt{DATE}, \texttt{TIMESTAMP} and \texttt{TIME}, which can be further qualified as either \texttt{WITH} or \texttt{WITHOUT} \texttt{TIME ZONE} (the \texttt{WITHOUT} form being more common.) They are typically implemented as fixed-point types containing an offset from some epoch (\eg Julian Days.) This makes them compact to store using column store compression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, and further allows some temporal operations to be implemented very efficiently using simple arithmetic. Thus from the RDBMS perspective, representing dates in scalar form provides  benefits for users, both in terms of analytic operations and query performance.
 
@@ -66,14 +66,14 @@ Several RDBMSes (\eg MySQL, Oracle and Postgres) provide row-level functions for
 
 One solution to this problem might have been to design a graphical environment that enabled users to construct valid patterns using visually compelling representations to reduce the cognitive load. This approach would have involved a substantial development effort with no guarantee that the result would be correct if the user misunderstood the environment. Moreover, this approach only solves the syntax problem -- the user is still required to switch contexts to solve their problem.
 
-Our solution was to develop two machine learning algorithms for automatically deriving the format string from the user's data with over 95\% parsing accuracy. This approach allows the user to simply specify "this column is a date" and the visualization system can respond quickly and accurately enough to avoid interrupting the user's cognitive flow.
+Our solution was to develop two machine learning algorithms for automatically deriving the format string from the user's data with over 95\% parsing accuracy \vidya{we need to mention why we chose to develop two separate algorithms. One reason being for cross-validation over a large set of output results from each}. This approach allows the user to simply specify ``this column is a date" and the visualization system can respond quickly and accurately enough to avoid interrupting the user's cognitive flow.
 
 \subsection{Contributions}
 
 Specifically, our contributions include:
-
+\vidya{also good to mention that we are able to parse many different formats and provide a unique approach to cross-validate the the parsing accuracy by developing two independent and different algorithms}
 \begin{itemize}
-\item By analyzing an on line corpus, we provide evidence that practical date parsing requires the ability to recognize hundreds of formats;
+\item By analyzing an online corpus, we provide evidence that practical date parsing requires the ability to recognize hundreds of formats;
 \item We show how to extend prior work on Minimum Descriptive Length structure extraction to generate a freely available date format domain language with over 95\% accuracy;
 \item We describe a second Natural Language Processing technique for generating the same date format domain language with similar accuracy. We describe how the basic algorithm is extended to support grammar variants and constraints unique to date formats. The parsing algorithm is extended to compute an overall dominant pattern over a data column;
 \item We describe some limitations of this domain language that would improve its utility.
