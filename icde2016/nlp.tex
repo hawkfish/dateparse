@@ -59,7 +59,7 @@ We define a \textit{EBNF} grammar for identifying date-time strings as follows:
 \end{grammar}
 
 
-The parsed output is then converted to the ICU Date Format Language described in Section 3.2 in order to effectively cross-validate results from the MDL algorithm. While this grammar accounts for the use of meridian markers `a.m.' and `p.m.' for the 12-hour format, ICU does not support these tokens, and they are simply ignored.
+The parsed output is then converted to the ICU Date Format Language described in Section IIA in order to effectively cross-validate results from the MDL algorithm. While this grammar accounts for the use of meridian markers `a.m.' and `p.m.' for the 12-hour format, ICU does not support these tokens, and they are simply ignored.
 
 \subsection{Grammar Variants and Constraints}
 
@@ -71,7 +71,7 @@ While custom production rules can be added to the existing grammar to exclude su
 
 \begin{itemize}
 \item Restriction on the distribution of $30$ and $31$:
-Months usually alternate between lengths of 30 and 31 days. We can use x mod 2 to get an alternating pattern of 1 and 0, then just add our constant base number of days:
+Months usually alternate between lengths of $30$ and $31$ days. We can use $x \Mod 2$ to get an alternating pattern of 1 and 0, then just add our constant base number of days:
 
 \begin{equation}
 \texttt{Day} = 30 + x \Mod 2
@@ -89,7 +89,7 @@ To obtain an inverse pattern of alternating 0 and 1, we add 1 to the dividend:
 
 In Equation $2$ the number of days for \texttt{August} through \texttt{December} is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Multiplying a term by this expression will result in the term being cancelled out outside its domain. To mask the latter piece of our function, we need an expression equal to $1$ where $8 \le x\le 12$. Floor division by 8 works well, since $x < 16$.
 
-Now if we substitute this expression in the x + 1 dividend of Equation $2$, we can invert the pattern using our mask:
+Now if we substitute this expression in the $x + 1$ dividend of Equation $2$, we can invert the pattern using our mask:
 
 \begin{equation}
 \texttt{Day} = 30 + (x + \floor{\frac{x}{8}}) \Mod 2
@@ -123,9 +123,9 @@ Given a CFG grammar $G$, we define  $\tau_G(s)$ as the set of all possible parse
 Assigning initial probability weights to the grammar for computing the parse with the highest weight, tends to be a more scalable and flexible approach to disambiguation rather than building a deep knowledge ontology. We bootstrap the probability weights in the \texttt{PCFG}, by setting initial probability weights to various rules in the grammar as follows:
 
 \begin{itemize}
-\item Similar to the MDL ranking properties described in Section 3.7, rules involving the non-terminal \texttt{DateGrammar} on the left-side of the rule, are assigned probability weights higher than those rules with the non-terminal being \texttt{TimeGrammar}. In practice, assigning $p(\texttt{DateGrammar} \rightarrow \beta_{1}) = 0.9$ and $p(\texttt{TimeGrammar} \rightarrow \beta_{2}) = 0.7$ leads to optimal ranking of the parse trees.
+\item Similar to the MDL ranking properties described in Section IIIG, rules involving the non-terminal \texttt{DateGrammar} on the left-side of the rule, are assigned probability weights higher than those rules with the non-terminal being \texttt{TimeGrammar}. In practice, assigning $p(\texttt{DateGrammar} \rightarrow \beta_{1}) = 0.9$ and $p(\texttt{TimeGrammar} \rightarrow \beta_{2}) = 0.7$ leads to optimal ranking of the parse trees.
 
-\item For the non-terminal symbol \texttt{Day}, the constraint specified is a range between 01 and 28-31, depending on month/year. However, for \texttt{dd} $> 12$, $p(\texttt{Day} \rightarrow d d) = 1.0$, and $0.5$ otherwise. This assignment helps disambiguate days from months.
+\item For the non-terminal symbol \texttt{Day}, the constraint specified is a range between $01$ and $28-31$, depending on month/year. However, for \texttt{dd} $> 12$, $p(\texttt{Day} \rightarrow d d) = 1.0$, and $0.5$ otherwise. This assignment helps disambiguate days from months.
 
 
 
