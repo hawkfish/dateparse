@@ -1,17 +1,22 @@
 The first algorithm is a Minimum Descriptive Length~\cite{Rissanen:1978} approach derived from the domain system presented in the Potter's Wheel system of Raman \textit{et al.}~\cite{Raman:2001}. We describe a number of extensions to their structure extraction system to support more complex redundancy, non-English locales, improved performance and date-specific pruning.
 
 \subsection{Domains}
-\vidya{Explain what you mean by domain.}
-Potter's Wheel presents an algorithm for deriving a common structure for a set of strings by breaking each string down into a sequence of domains. These domains are described by an interface that includes:
-\vidya{can you provide brief examples for each of these functions so I can understand what they are?}
+Potter's Wheel presents an algorithm for deriving a common structure for a set of strings by breaking each string down into a sequence of \textit{domains}. A domain is a set of strings, with a few optional statistical properties. They are defined by an interface that includes:
 \begin{itemize}
-\item A required inclusion function to test for membership in the domain (\texttt{match})
-\item An optional function to compute the number of values in the domain with a given length (\texttt{cardinality})
-\item An optional function to update statistics for the domain based on a given value (\texttt{updateStatistics})
-\item An optional function to prevent consideration of a domain that is redundant (\texttt{isRedundantAfter}).
+\item A required inclusion function to test for membership in the domain (\functionname{match}). 
+For example, the domain \functionname{<Digits>} would return true for the string \functionname{"123"} 
+and false for the string \functionname{"abc"}.
+\item An optional function to compute the number of values in the domain with a given length (\functionname{cardinality}).
+For example, the domain for three letter month names (\functionname{MMM}) would return $12$ for the length $3$ and $0$ otherwise.
+\item An optional function to update statistics for the domain based on a given value (\functionname{updateStatistics}).
+For example, the domain \functionname{MMM} might keep a histogram of how frequently each month was encountered.
+\item An optional function to prevent consideration of a domain that is redundant (\functionname{isRedundantAfter}).
+For example, the domain \functionname{<Digits>} would be redundant after itself 
+(\ie there is no difference between a single run of digits and two adjacent runs.)
 \end{itemize}
 
-In our approach, we implement all of these functions, but with significant changes to the last one, which we will describe below.\vidya{can you briefly explain why we significantly change the last one here?}
+In our approach, we implement all of these functions, but with significant changes to the last one to increase level of pruning applied during
+domain enumeration. These changes will be described below.
 
 With this interface, we can now define a set of domains for each date part that we wish to be able to parse. These are mostly straightforward enumerations and numeric ranges, each tagged with the ICU format code. Since the ICU parser is flexible about parsing single or double digit formats, we use double-digit formats, but accept one or two digits. One important exception to this rule is for years, which are fixed width fields ($2$ or $4$).
 
