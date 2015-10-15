@@ -1,3 +1,6 @@
+%But I do think that certain things can be described using more algorithmic way instead of text.
+
+
 \subsection{Context-Free Grammar}
 ICU date formats are well defined both structurally and semantically, and can be defined by a context-free grammar (CFG). This has several advantages. First, it allows for modular syntax definitions, which simplifies grammar development and enables reuse. Second, it grants total freedom in structuring a grammar to best fit its intended use. The power of such a grammar is its expressiveness, and is not constrained by pattern rigidities that are prevalent with regular expressions and text processing~\cite{Grune:1990}.
 
@@ -151,4 +154,4 @@ The grammar parser's success is often limited by data ambiguity, and incomplete 
 
 The CKY parser is run over the same set of samples from each validation file to generate a probabilistic distribution of possible parse trees corresponding to a set of date-time patterns. As a second pass of the parser, starting from the most probable parse tree, each parse tree is then applied to the entire file's columnar data to determine the dominant pattern. For example, another entry in the same dataset could be \texttt{`25/3/2007'} thus increasing the probability that the format is \texttt{dd/mm/yyyy} as opposed to \texttt{mm/dd/yyyy}.
 
-In addition to the columnar data context, the locale is also used to help maximize the probabilistic likelihood of a particular date-time pattern. The locale of the data column is used to retrieve the corresponding corpora for helping with the parsing and for correcting syntactical errors. However, similar to the locale sensitivity issue described in Section 4.6, the locale and the data may not always match. The dominant pattern is simply computed over the data column based on the ranked set of parse tree results.
+In addition to the columnar data context, the locale is also used to help maximize the probabilistic likelihood of a particular date-time pattern. The locale of the data column is used to retrieve the corresponding corpora for helping with the parsing and for correcting syntactical errors. However, similar to the locale sensitivity issue described in Section IIIF, the locale and the data may not always match. The dominant pattern is simply computed over the data column based on the ranked set of parse tree results.
