@@ -70,7 +70,7 @@ MDL structure analysis naturally produces a ranked list of format candidates, bu
 \begin{itemize}
 \item Because we have a set of samples, we can apply the candidate format to the strings to see how well it performs. Formats with fewer parse errors are preferred.
 \item Date parts can be considered a place-value system, so we prefer ``more significant'' components (\eg month-day-year over hour-minute-second).
-\item If two formats from different locales give the same results, prefer the original column locale. The sample set may have missed an example where this could be important. For example, the month name for "September" is the same in both German and English, but "October" and "Oktober" are different.
+\item If two formats from different locales give the same results, prefer the original column locale. The sample set may have missed an example where this could be important. For example, the month name for "September" is the same in both German and English, but ``October" and ``Oktober" are different.
 \item If the format has an ambiguous date order (\eg all days are less than 12), then prefer the default date order of the locale. Again, the sample set may have missed a counterexample, so this is the best option.
 \item Once these semantic preferences have been considered, we then prefer the more compact (MDL) representation.
 \end{itemize}
