@@ -8,7 +8,7 @@ For each of the two algorithms described, we want to measure the fraction of can
  
 \subsection{Data Preparation}
 
-The training data and test data are taken from data sets published to a free, online data analysis website. The published data includes both the raw data and how it was used for analysis. The service limits data sets to a maximum of 100K rows stored in a columnar database with collated strings.
+The training data and test data are taken from data sets published to a free, online data analysis website. This website contains data sets that users analyzed and were interested in sharing with other people through the web. It may not be representative of data in other settings such as corporate data warehouses, but each data set is one that a user was willing to invest some time in analyzing. The published data includes both the raw data and how it was used for analysis. The service limits data sets to a maximum of 100K rows stored in a columnar database with collated strings.
 
 We collected the contents of columns with names containing any of the following strings: Date, month, created, dt (abbreviation for date), mes (month in Spanish), datum (date in German), fecha (date in Spanish), data (date in Portuguese), and the day character used in Chinese and Japanese. Roughly 95\% of the data on the website is in English, but we attempted to include non-English data that was available. Fields of any data type other than date or datetime were analyzed, including strings, integers, and floats. One file containing the unique non-null values was created for each scanned column, and the column collation was stored in a second table.
 
