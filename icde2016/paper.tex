@@ -35,6 +35,7 @@
 \usepackage{mathtools}
 \usepackage{color}
 \usepackage{caption} 
+\usepackage{tikz}
 \captionsetup[table]{skip=10pt}
 
 \def\eg{\textit{e.g.} }
@@ -113,7 +114,6 @@ In this paper, we present two algorithms for automatically deriving these date f
 \section{Natural Language Processing}
 \input{nlp}
 
-\vidya{maybe this section should be `Validation'? `Experiments doesn't seem to capture the content here}
 \section{Experiments}
 \input{testing}
 
@@ -134,7 +134,7 @@ In this paper, we present two algorithms for automatically deriving these date f
 % The following two commands are all you need in the
 % initial runs of your .tex file to
 % produce the bibliography for the citations in your paper.
-\IEEEtriggeratref{25}
+%\IEEEtriggeratref{25}
 \bibliographystyle{IEEEtran}
 \bibliography{dateparse}  % sigproc.bib is the name of the Bibliography in this case
 % You must have a proper ``.bib'' file

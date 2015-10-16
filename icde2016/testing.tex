@@ -12,7 +12,7 @@ The training data and test data are taken from data sets published to a free, on
 
 We collected the contents of columns with names containing any of the following strings: Date, month, created, dt (abbreviation for date), mes (month in Spanish), datum (date in German), fecha (date in Spanish), data (date in Portuguese), and the day character used in Chinese and Japanese. Roughly 95\% of the data on the website is in English, but we attempted to include non-English data that was available. Fields of any data type other than date or datetime were analyzed, including strings, integers, and floats. One file containing the unique non-null values was created for each scanned column, and the column collation was stored in a second table.
 
-Most database and spreadsheet systems already detect a limited set of date formats. For instance, typing the string \texttt{"12/31/1999"} into Microsoft Excel, is automatically interpreted as the date \texttt{1999-12-31}. The Microsoft Jet library used to read these text files detects a few date formats as well. Any column already converted by Excel or Jet was not included in this study.
+Most database and spreadsheet systems already detect a limited set of date formats. For instance, typing the string \texttt{"12/31/1999"} into Microsoft Excel, is automatically interpreted as the date \texttt{1999-12-31}. The Microsoft Jet library \vidya{need a reference here} used to read these text files detects a few date formats as well. Any column already converted by Excel or Jet was not included in this study.
 
 The data was divided into two sets, one for training and one for validation. There were 30,968 files in the training set and 31,546 files in the resulting verification set.
 
@@ -28,7 +28,7 @@ Each column was then reduced to a maximum sample set of 32. We excluded domain v
 Columns that had no remaining valid samples were discarded. 
 
 \subsubsection{Sampling}
-The remaining samples were hashed and sorted on the hash value, with the top 32 values being retained as the column's sample. We can increase the sample size if needed, but for dates, it appears to be an adequate number. In any case, the median number of non-null rows per domain in our test data is 50, so increasing the sample size would have little benefit.
+The remaining samples were hashed and sorted on the hash value, with the top $32$ values being retained as the column's sample. We can increase the sample size if needed, but for dates, it appears to be an adequate number. In any case, the median number of non-null rows per domain in our test data is $50$, so increasing the sample size would have little benefit.
 
 \subsubsection{Numeric Timestamps}
 After NULL filtering, a common class of date representation (numeric timestamps) remained that was unsuited for parsing via our date format syntax. This included Unix epoch timestamps (expressed as second, millisecond or microsecond counts from \texttt{1970-01-01}) and Microsoft Excel timestamps (expressed fractional days since \texttt{1900-01-01}). A simple test to check that the column was numeric and inside a specific range of values representing recent dates allowed us to tag these columns to avoid analyzing them further (and incidentally to identify them for generating a simple date extraction calculation for the user.)
@@ -97,11 +97,16 @@ What do these formats look like? Figure \ref{fig:M3} shows a histogram of the 25
 Some of the dates are clearly just numbers, but our approach is to assume that when the user tells us that the column contains dates we should find the best fit. The samples include dates from a wide range of historical sources (\eg Roman pottery dates) so we have elected to defer the date identification task to the user.
 
 \subsubsection{Natural Language Processing}
+
+
 We implemented the grammar, training and parsing in Python 3.4.1 using the Natural Language Toolkit libraries~\cite{nltk} on a quad core Dell T7600 running Windows 7. The complexity of the CYK parsing algorithm is $O(n^{3}|G|)$, where $n$ is the length of the input and $|G|$ is the size of the grammar~\cite{Younger67}. The PCFG grammar uses a set of $22$ phrase-level non-terminals and $30$ terminals to classify the various constituents in the corpus. Because the CYK algorithm finds the maximum likelihood solution, there are no search errors (rather probability $p = 0$, and a modification in the grammar is required to improve accuracy.
 
 Similar to the MDL algorithm described in the previous subsection, the CYK parser is run over the same set of samples from each validation file to generate a ranked list of parse trees representing the date-time formats. As a second pass of the parser, starting from the most probable parse tree, each parse tree is then applied to the entire file's columnar data to determine the dominant pattern(s). For the second pass, we can parallelize the CYK parsing because the dependencies between reapplying the ranked list of parse trees are very sparse.
 
 The initial average parsing speed to compute the ranked set of probable parse trees is $0.93s$, while the average time taken to compute the overall dominant pattern(s) for the entire column of data is $1.4s$. While the natural language parsing implementation is in Python as the NLTK package is easily configurable, we could expect greater speed-up in parsing performance by employing C/C++ CYK parsing libraries.
+
+
+Out of the $31,546$ files used for testing, the NLP parser identified a dominant format for $26, 534 (84.11\%)$ where $p >= 0.5$. $1634$ unique formats were identified. Figure \ref{fig:NLP1} shows a histogram of the most common formats identified containing \texttt{Year}. There are some variations compared to Figure \ref{fig:M3} including the fact that we are not filtering the results by any error rate in the NLP parsed results.
 
 \begin{figure}[ht]
 \centering
@@ -109,9 +114,6 @@ The initial average parsing speed to compute the ranked set of probable parse tr
 \caption{Most common date formats identified by the NLP algorithm.}
 \label{fig:NLP1}
 \end{figure}
-
-
-Out of the $31,546$ files used for testing, the NLP parser identified a dominant format for $26, 534 (84.11\%)$ where $p >= 0.5$. $1634$ unique formats were identified. Figure \ref{fig:NLP1} shows a histogram of the most common formats identified containing \texttt{Year}. There are some variations compared to Figure \ref{fig:M3} including the fact that we are not filtering the results by any error rate in the NLP parsed results.
 
 \subsubsection{Cross-Checking}
 We compared the results of the minimum description length and natural language processing algorithms. The two algorithms match for 97.9\% of our validation set. The main differences in the results are due to small differences in the implementations. The minimum description length implementation recognizes formats with leading plus and minus signs, but these are almost certainly numbers, not dates. The minimum description length implementation also recognizes the Excel date formats, but this was not supported by the natural language implementation. There was one file that contained formats such as \texttt{`Fall 2000'} and \texttt{`Spring 2000'}, and the two algorithms picked different seasons in their format. One other file contained a set of integers that are not actually dates, and one algorithm picked \texttt{MMyyyy} format, while the other picked \texttt{HHmmss} format.
