@@ -115,3 +115,7 @@ Out of the $31,546$ files used for testing, the NLP parser identified a dominant
 
 \subsubsection{Cross-Checking}
 We compared the results of the minimum description length and natural language processing algorithms. The two algorithms match for 97.9\% of our validation set. The main differences in the results are due to small differences in the implementations. The minimum description length implementation recognizes formats with leading plus and minus signs, but these are almost certainly numbers, not dates. The minimum description length implementation also recognizes the Excel date formats, but this was not supported by the natural language implementation. There was one file that contained formats such as \texttt{`Fall 2000'} and \texttt{`Spring 2000'}, and the two algorithms picked different seasons in their format. One other file contained a set of integers that are not actually dates, and one algorithm picked \texttt{MMyyyy} format, while the other picked \texttt{HHmmss} format.
+
+\subsubsection{Production}
+
+Although both algorithms achieved comparable high accuracies in parsing date time strings, we utilized the minimum description length method in the production code of our system. This was primarily due to the fact that the MDL algorithm was written in C++, allowing for higher performance. We believe that NLP version if written in C++ as opposed to Python, would lead to better performance. 
