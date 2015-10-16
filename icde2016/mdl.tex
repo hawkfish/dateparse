@@ -16,7 +16,7 @@ For example, the domain \functionname{<Digits>} would be redundant after itself
 \end{itemize}
 
 In our approach, we implement all of these functions, but with significant changes to the last one to increase level of pruning applied during
-domain enumeration. These changes will be described below.
+domain enumeration. These changes are described below.
 
 With this interface, we can now define a set of domains for each date part that we wish to be able to parse. These are mostly straightforward enumerations and numeric ranges, each tagged with the ICU format code. Since the ICU parser is flexible about parsing single or double digit formats, we use double-digit formats, but accept one or two digits. One important exception to this rule is for years, which are fixed width fields ($2$ or $4$).
 
