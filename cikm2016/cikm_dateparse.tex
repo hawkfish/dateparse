@@ -37,8 +37,11 @@
 \usepackage{color}
 \usepackage{caption} 
 \usepackage{tikz}
+\usepackage{enumitem}
 \captionsetup[table]{skip=10pt}
 
+\newenvironment{tight_itemize}{\begin{itemize} \itemsep
+-2pt}{\end{itemize}}
 %
 \def\sharedaffiliation{%
 \end{tabular}
@@ -48,6 +51,7 @@
 \def\ie{\textit{i.e.} }
 \def\dateparse{\mbox{\texttt{DATEPARSE}}}
 \hyphenation{time-stamp}
+
 
 
 % to add comments
@@ -61,9 +65,7 @@
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
-% tightening the whitespace for itemize
-\newenvironment{tight_itemize}{\begin{itemize} \itemsep
--2pt}{\end{itemize}}
+
 
 %
 \begin{document}

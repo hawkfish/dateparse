@@ -50,6 +50,7 @@ These types of visualizations are difficult to specify with simple categorical s
 \subsection{Parsing Dates}
 This parsing of date representations is one of the oldest data preparation problems we have observed. A common version of this problem is how to convert columns of integers of the form \texttt{yyyyMMdd} to date scalars. Na\"{i}ve users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date. Unfortunately, this approach has a number of problems:
 \begin{itemize}
+\setlength\itemsep{0em}
 \item String operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSes)
 \item Default parsing of date formats is locale-dependent, and may not work when the analysis is shared across an international organization (\eg between the US and European offices)
 \item The parsing code is hard to understand and maintain because it uses a verbose, general-purpose string-handling syntax instead of a specialized domain language.
@@ -88,6 +89,7 @@ Our solution was to develop two algorithms for automatically deriving the format
 
 Specifically, our contributions include:
 \begin{itemize}
+\setlength\itemsep{0em}
 \item By analyzing an online corpus, we provide evidence that practical date parsing requires the ability to recognize hundreds of formats;
 \item We show how to extend prior work on Minimum Descriptive Length structure extraction to generate a freely available date format domain language with over 95\% accuracy;
 \item We describe a second Natural Language Processing technique for generating the same date format domain language with similar accuracy. We describe how the basic algorithm is extended to support grammar variants and constraints unique to date formats. The parsing algorithm is extended to compute an overall dominant pattern over a data column;
