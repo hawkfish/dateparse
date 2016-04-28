@@ -47,8 +47,12 @@
 \end{tabular}
 \begin{tabular}{c}}
 %
-\def\eg{\textit{e.g.} }
-\def\ie{\textit{i.e.} }
+\def\eg{\textit{e.g.\@} }
+\def\ie{\textit{i.e.\@} }
+\def\cf{\textit{cf.\@} }
+\def\etal{\textit{et al.\@} }
+\def\naive{na\"ive}
+\def\Naive{Na\"ive}
 \def\dateparse{\mbox{\texttt{DATEPARSE}}}
 \hyphenation{time-stamp}
 
@@ -65,6 +69,23 @@
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
+% Alter some LaTeX defaults for better treatment of figures:
+% See p.105 of "TeX Unbound" for suggested values.
+% See pp. 199-200 of Lamport's "LaTeX" book for details.
+% General parameters, for ALL pages:
+\renewcommand{\topfraction}{0.9}    % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8} % max fraction of floats at bottom
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{2} % 2 may work better
+\setcounter{dbltopnumber}{1} % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9} % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.05}  % allow minimal text w. figs
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.8}  % require fuller float pages
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.8}   % require fuller float pages
 
 
 %
@@ -92,28 +113,25 @@ In this paper, we present two algorithms for automatically deriving date formats
 
 %\terms{Algorithms, Performance}
 
-\section{Introduction}
+\section{Introduction} \label{sec:intro}
 \input{intro}
 
-\section{Background}
+\section{Background} \label{sec:background}
 \input{background}
 
-\section{Minimal Descriptive Length}
+\section{Minimal Descriptive Length} \label{sec:mdl}
 \input{mdl}
 
-\section{Natural Language Processing}
+\section{Natural Language Processing} \label{sec:nlp}
 \input{nlp}
 
-\section{Experiments}
+\section{Evaluation} \label{sec:experiments}
 \input{testing}
 
-\section{Related Work}
-\input{relatedwork}
-
-\section{Future Work}
+\section{Future Work} \label{sec:future}
 \input{futurework}
 
-\section{Conclusion}
+\section{Conclusion} \label{sec:conclusion}
 \input{conclusion}
 
 %ACKNOWLEDGMENTS are optional
