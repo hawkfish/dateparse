@@ -21,11 +21,12 @@ The data was divided into two sets, one for training and one for validation. The
 \subsubsection{NULL Filtering}
 Each column was then reduced to a maximum sample set of 32. We excluded domain values that appeared to be representations of \texttt{NULL}:
 \begin{itemize}
+\setlength\itemsep{0em}
 \item Values containing the substring \texttt{NULL}
 \item Values containing no digits and at most one non-whitespace character (\eg \texttt{" / / "})
 \item Values on a list of empirically determined common \texttt{NULL} values (\eg \texttt{0000-00-00}, \texttt{NaN})
 \end{itemize}
-Columns that had no remaining valid samples were discarded. 
+%Columns that had no remaining valid samples were discarded. 
 
 \subsubsection{Sampling}
 The remaining samples were hashed and sorted on the hash value, with the top $32$ values being retained as the column's sample. We can increase the sample size if needed, but for dates, it appears to be an adequate number. In any case, the median number of non-null rows per domain in our test data is $50$, so increasing the sample size would have little benefit.

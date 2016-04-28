@@ -3,6 +3,7 @@ The first algorithm is a Minimum Descriptive Length~\cite{Rissanen:1978} approac
 \subsection{Domains}
 Potter's Wheel presents an algorithm for deriving a common structure for a set of strings by breaking each string down into a sequence of \textit{domains}. A domain is a set of strings, with a few optional statistical properties. They are defined by an interface that includes:
 \begin{itemize}
+\setlength\itemsep{0em}
 \item A required inclusion function to test for membership in the domain (\functionname{match}). 
 For example, the domain \functionname{<Digits>} would return true for the string \functionname{"123"} 
 and false for the string \functionname{"abc"}.
@@ -25,6 +26,7 @@ We also included some enumerated domains for handling constant strings and some 
 \subsection{Redundancy Extensions}
 A difficulty in using this kind of structure extraction is that the algorithm for enumerating structures is exponential in the number of domains. This is especially true in the date format problem because there are identical domains (\eg months and meridian hours), nearly identical domains (\eg days and hours) and there are often no field delimiters (\eg \texttt{2012Mar06134427}). To handle this, we have extended the existing pruning API with two other sets of domain identifiers:
 \begin{itemize}
+\setlength\itemsep{0em}
 \item A set of \textit{prunable} identifiers, which are not allowed to precede the domain. For example, once we have a month field, no other month fields should be generated. Each month domain therefore lists all the month domains in its prunable set.
 \item A set of \textit{context} identifiers, one of which must have been previously generated before the domain is considered. For example, a meridian domain can only be generated once an hour field has been found, but there may be other intervening fields.
 \end{itemize}
@@ -50,6 +52,7 @@ Domain parameterization is an important part of generating compact representatio
 \subsection{Global Pruning}
 The pruning rules used for the structure extraction reduce the search space dramatically, but they are also contextual and can only look backwards. The domains also contain a fair amount of ambiguity that requires the application of domain knowledge. We therefore found it necessary to add some post-generation global pruning rules:
 \begin{itemize}
+\setlength\itemsep{0em}
 \item The set of date parts cannot contain place value gaps (\eg structures that have year and day without month are removed.)
 \item Similarly, the set of time parts cannot contain place value gaps and must also be in place value order (times are never written in orders such as \texttt{mhs}.)
 \item The existence of time parts cannot make dates incomplete (\eg patterns like year-day-hour are removed.)
@@ -68,6 +71,7 @@ We have built this system for the Gregorian calendar only as our visualization s
 \subsection{Ranking}
 MDL structure analysis naturally produces a ranked list of format candidates, but we have found that a number of other properties of the formats should be preferred over simple compactness:
 \begin{itemize}
+\setlength\itemsep{0em}
 \item Because we have a set of samples, we can apply the candidate format to the strings to see how well it performs. Formats with fewer parse errors are preferred.
 \item Date parts can be considered a place-value system, so we prefer ``more significant'' components (\eg month-day-year over hour-minute-second).
 \item If two formats from different locales give the same results, prefer the original column locale. The sample set may have missed an example where this could be important. For example, the month name for "September" is the same in both German and English, but ``October" and ``Oktober" are different.

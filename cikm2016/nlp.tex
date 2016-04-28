@@ -73,44 +73,21 @@ The date-time grammar also includes a large number of syntactically correct but 
 While custom production rules can be added to the existing grammar to exclude such expressions, this approach is not optimal as it leads to a rather large grammar that needs to account for every single semantically valid date-time sequence of terminal symbols. Rather, we modify the existing grammar with the following additional constraints to the \texttt{Day} terminal symbol for excluding such expressions:
 
 \begin{itemize}
-\item Restriction on the distribution of $30$ and $31$:
-Months usually alternate between lengths of $30$ and $31$ days. We can use $x \Mod 2$ to get an alternating pattern of 1 and 0, then just add our constant base number of days:
+\setlength\itemsep{0em}
+\item \textbf{Restriction on the distribution of $30$ and $31$}:
+Months usually alternate between lengths of $30$ and $31$ days. We use $x \Mod 2$ to get an alternating pattern of 1 and 0, and then add the constant base number of days, $\texttt{Day} = 30 + x \Mod 2$, where $x \in [1..12]$ months.
 
-\begin{equation}
-\texttt{Day} = 30 + x \Mod 2
-\end{equation}
+Except for \texttt{February}, Equation $1$ addresses \texttt{January} and \texttt{March} through \texttt{July}. After \texttt{July}, the pattern should skip one, and the rest of the months should follow the alternating pattern inversely. To obtain an inverse pattern of alternating 0 and 1, we add 1 to the dividend:
+$\texttt{Day} = 30 + (x + 1) \Mod 2$.
 
-where $x \in [1..12]$ for each of the $12$ months.
-
-Except for \texttt{February}, Equation $1$ addresses \texttt{January} and \texttt{March} through \texttt{July}. After \texttt{July}, the pattern should skip one, and the rest of the months should follow the alternating pattern inversely.
-
-To obtain an inverse pattern of alternating 0 and 1, we add 1 to the dividend:
-
-\begin{equation}
-\texttt{Day} = 30 + (x + 1) \Mod 2
-\end{equation}
-
-In Equation $2$ the number of days for \texttt{August} through \texttt{December} is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Multiplying a term by this expression will result in the term being cancelled out outside its domain. To mask the latter piece of our function, we need an expression equal to $1$ where $8 \le x\le 12$. Floor division by 8 works well, since $x < 16$.
-
-Now if we substitute this expression in the $x + 1$ dividend of Equation $2$, we can invert the pattern using our mask:
-
-\begin{equation}
-\texttt{Day} = 30 + (x + \floor{\frac{x}{8}}) \Mod 2
-\end{equation}
+In Equation $2$ the number of days for \texttt{August} through \texttt{December} is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Multiplying a term by this expression will result in the term being cancelled out outside its domain. To mask the latter piece of our function, we need an expression equal to $1$ where $8 \le x\le 12$. Floor division by 8 works well, since $x < 16$. Substituting this expression in the $x + 1$ dividend of Equation $2$, we can invert the pattern using our mask: $\texttt{Day} = 30 + (x + \floor{\frac{x}{8}}) \Mod 2$.
 
 
-\item LeapYear Restriction for \texttt{February}:
-While the above restriction applies to all months barring \texttt{February}, we also apply a constraint to the number of days for \texttt{February}, based on whether the year is leap year or not. For this, we define a new symbol in the grammar called \texttt{LeapYear}. If an expression containing the month \texttt{`February'} or any such variant (\textit{e.g.} \texttt{`Feb'}, \texttt{`2'}) with the day \texttt{`29'} and a year, would need to resolve the \texttt{Year} symbol to be a \texttt{LeapYear}, defined as:
-
-\begin{equation}
-\texttt{Year} \Mod 4 == 0
-\end{equation}
-
+\item \textbf{LeapYear Restriction for \texttt{February}}:
+While the above restriction applies to all months barring \texttt{February}, we also apply a constraint to the number of days for \texttt{February}, based on whether the year is leap year or not. For this, we define a new symbol in the grammar called \texttt{LeapYear}. If an expression containing the month \texttt{`February'} or any such variant (\textit{e.g.} \texttt{`Feb'}, \texttt{`2'}) with the day \texttt{`29'} and a year, would need to resolve the \texttt{Year} symbol to be a \texttt{LeapYear}, defined as $\texttt{Year} \Mod 4 == 0$.
 \end{itemize}
 
-However, Equation $4$ is just an approximation. The Gregorian calendar also requires that a year evenly divisible by $100$ (\textit{e.g.}, 1800) is a leap year only if it is also evenly divisible by $400$. 
-
-Equations $3$ and $4$ are now added as constraints to the \texttt{Days} symbol in the grammar.
+However, Equation $4$ is just an approximation. The Gregorian calendar also requires that a year evenly divisible by $100$ (\textit{e.g.}, 1800) is a leap year only if it is also evenly divisible by $400$. Equations $3$ and $4$ are now added as constraints to the \texttt{Days} symbol in the grammar.
 
 \subsection{Probabilistic Context-Free Grammar}
 
