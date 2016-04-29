@@ -5,14 +5,14 @@ Potter's Wheel presents an algorithm for deriving a common structure for a set o
 \begin{itemize}
 \setlength\itemsep{0em}
 \item A required inclusion function to test for membership in the domain (\functionname{match}). 
-For example, the domain \functionname{<Digits>} would return true for the string \functionname{"123"} 
-and false for the string \functionname{"abc"}.
+For \textit{e.g.}, the domain \functionname{<Digits>} returns true for \functionname{"123"} 
+and false for \functionname{"abc"}.
 \item An optional function to compute the number of values in the domain with a given length (\functionname{cardinality}).
-For example, the domain for three letter month names (\functionname{MMM}) would return $12$ for the length $3$ and $0$ otherwise.
+For \textit{e.g.}, the domain for three letter month names (\functionname{MMM}) would return $12$ for the length $3$ and $0$ otherwise.
 \item An optional function to update statistics for the domain based on a given value (\functionname{updateStatistics}).
-For example, the domain \functionname{MMM} might keep a histogram of how frequently each month was encountered.
+For \textit{e.g.}, the domain \functionname{MMM} might keep a histogram of how frequently each month was encountered.
 \item An optional function to prevent consideration of a domain that is redundant (\functionname{isRedundantAfter}).
-For example, the domain \functionname{<Digits>} would be redundant after itself 
+For \textit{e.g.}, the domain \functionname{<Digits>} would be redundant after itself 
 (\ie there is no difference between a single run of digits and two adjacent runs.)
 \end{itemize}
 
@@ -24,7 +24,7 @@ With this interface, we can now define a set of domains for each date part that 
 We also included some enumerated domains for handling constant strings and some simple regular expression domains for delimiters such as spaces, punctuation or alphabetic characters. We found that the inclusion of arbitrary numeric domains caused the run time to grow exponentially as the number of possible matches could not be pruned intelligently. This restriction extends to domains that can contain arbitrary digit sequences (such as any). Because of this restriction, the algorithm cannot extract non-date numeric fields.
 
 \subsection{Redundancy Extensions}
-A difficulty in using this kind of structure extraction is that the algorithm for enumerating structures is exponential in the number of domains. This is especially true in the date format problem because there are identical domains (\eg months and meridian hours), nearly identical domains (\eg days and hours) and there are often no field delimiters (\eg \texttt{2012Mar06134427}). To handle this, we have extended the existing pruning API with two other sets of domain identifiers:
+A difficulty in using this kind of structure extraction is that the algorithm for enumerating structures is exponential in the number of domains. This is especially true in the date format problem because there are identical domains (\eg months and meridian hours), nearly identical domains (\eg days and hours) and there are often no field delimiters (\eg \texttt{2012Mar06134427}). To handle this, we extend the existing pruning API with two other sets of domain identifiers:
 \begin{itemize}
 \setlength\itemsep{0em}
 \item A set of \textit{prunable} identifiers, which are not allowed to precede the domain. For example, once we have a month field, no other month fields should be generated. Each month domain therefore lists all the month domains in its prunable set.
@@ -69,7 +69,7 @@ Knowing the locale of a string is not always helpful. In our data set, we found 
 We have built this system for the Gregorian calendar only as our visualization system does not support non-Gregorian calendars and we have little evidence of other calendars (\eg Hebrew, Islamic Civil) being used for analytics. ICU supports non-Gregorian calendars and we expect the algorithm could be extended to them as well if needed.
 
 \subsection{Ranking}
-MDL structure analysis naturally produces a ranked list of format candidates, but we have found that a number of other properties of the formats should be preferred over simple compactness:
+MDL structure analysis produces a ranked list of format candidates, but we have found that a number of other properties of the formats should be preferred over simple compactness:
 \begin{itemize}
 \setlength\itemsep{0em}
 \item Because we have a set of samples, we can apply the candidate format to the strings to see how well it performs. Formats with fewer parse errors are preferred.

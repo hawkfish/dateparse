@@ -29,7 +29,7 @@ Each column was then reduced to a maximum sample set of 32. We excluded domain v
 %Columns that had no remaining valid samples were discarded. 
 
 \subsubsection{Sampling}
-The remaining samples were hashed and sorted on the hash value, with the top $32$ values being retained as the column's sample. We can increase the sample size if needed, but for dates, it appears to be an adequate number. In any case, the median number of non-null rows per domain in our test data is $50$, so increasing the sample size would have little benefit.
+The remaining samples were hashed and sorted on the hash value, with the top $32$ values retained as the column's sample. We can increase the sample size, but for dates, it appears to be an adequate number. In any case, the median number of non-null rows per domain in our test data is $50$, so increasing the sample size would have little benefit.
 
 \subsubsection{Numeric Timestamps}
 After NULL filtering, a common class of date representation (numeric timestamps) remained that was unsuited for parsing via our date format syntax. This included Unix epoch timestamps (expressed as second, millisecond or microsecond counts from \texttt{1970-01-01}) and Microsoft Excel timestamps (expressed fractional days since \texttt{1900-01-01}). A simple test to check that the column was numeric and inside a specific range of values representing recent dates allowed us to tag these columns to avoid analyzing them further (and incidentally to identify them for generating a simple date extraction calculation for the user.)
@@ -38,9 +38,9 @@ After NULL filtering, a common class of date representation (numeric timestamps)
 \subsubsection{Partial Dates}
 Many of the date formats that we encountered were incomplete dates, which necessitated creating rules for what date scalar they represented.
 
-ICU's date parsing APIs allow the specification of default values for parts when a format does not contain them. In our implementation, all time fields are set to \texttt{0} (midnight) and the date fields are set based on whether the format contains any date part specifications. When date parts are present, we use \texttt{2000-01-01} as the set of default date parts as it is the start of a leap year. When dealing with pure time formats, we model the output as a date/time and use \texttt{1899-12-30} for the date parts.
+ICU's date parsing APIs allow the specification of default values for parts not found in the format. In our implementation, all time fields are set to \texttt{0} (midnight) and the date fields are set based on whether the format contains any date part specifications. When date parts are present, we use \texttt{2000-01-01} as the set of default date parts as it is the start of a leap year. When dealing with pure time formats, we model the output as a date/time and use \texttt{1899-12-30} for the date parts.
 
-ICU will also parse Time Zones (which the algorithms recognize but the visualization system does not model) and Quarters (which we interpret as the first month of the period.) RDBMSes such as Oracle and Postgres that support time zones will be able to take advantage of  identified time zone fields.
+ICU will also parse Time Zones and Quarters (which we interpret as the first month of the period.) RDBMSes such as Oracle and Postgres that support time zones will be able to take advantage of  identified time zone fields.
 
 \subsubsection{Training Data}
 

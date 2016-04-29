@@ -52,15 +52,7 @@ The choice of a date format syntax for generation is somewhat arbitrary, but for
 \label{tab:icuformats}
 \end{table}
 
-While fairly extensive, the ICU syntax has a few limitations when working with real-world data:
-
-\begin{itemize}
-\setlength\itemsep{0em}
-\item No support for 4 letter month abbreviations (\eg \texttt{Sept.})
-\item No support for ordinal days (\eg \texttt{July 4th})
-\item No support for quarter postfix notation (\eg \texttt{2Q})
-\item No support for variant meridian markers (\eg \texttt{a.m.})
-\end{itemize}
+While fairly extensive, the ICU syntax has a few limitations when working with real-world data. It has no support for 4-letter month abbreviations (\eg \texttt{Sept.}), ordinal days (\eg \texttt{July 4th}), quarter postfix notation (\eg \texttt{2Q}) and variant meridian markers (\eg \texttt{a.m.}).
 
 These limitations did not affect the results significantly, and in the future we hope to submit ICU extensions to handle some of these formats. Moreover, all the languages we examined had their own limitations, so ICU is not unusual in this respect.
 
