@@ -19,13 +19,7 @@ The data was divided into two sets, one for training and one for validation. The
 % Should we quantify the number of formats excluded here?
 
 \subsubsection{NULL Filtering}
-Each column was then reduced to a maximum sample set of 32. We excluded domain values that appeared to be representations of \texttt{NULL}:
-\begin{itemize}
-\setlength\itemsep{0em}
-\item Values containing the substring \texttt{NULL}
-\item Values containing no digits and at most one non-whitespace character (\eg \texttt{" / / "})
-\item Values on a list of empirically determined common \texttt{NULL} values (\eg \texttt{0000-00-00}, \texttt{NaN})
-\end{itemize}
+Each column was then reduced to a maximum sample set of 32. We excluded domain values that either contain the substring \texttt{NULL}, contain no digits and at most one non-whitespace character (\eg \texttt{" / / "}), or any empirically determined common \texttt{NULL} value (\eg \texttt{0000-00-00}, \texttt{NaN}).
 %Columns that had no remaining valid samples were discarded. 
 
 \subsubsection{Sampling}

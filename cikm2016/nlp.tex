@@ -1,3 +1,5 @@
+\vidya{need to add a short intro here}
+
 \subsection{Context-Free Grammar}
 ICU date formats are well defined both structurally and semantically, and can be defined by a context-free grammar (CFG). This has several advantages. First, it allows for modular syntax definitions, which simplifies grammar development and enables reuse. Second, it grants total freedom in structuring a grammar to best fit its intended use. The power of such a grammar is its expressiveness, and is not constrained by pattern rigidities that are prevalent with regular expressions and text processing~\cite{Grune:1990}.
 
@@ -59,7 +61,7 @@ A portion of the \textit{EBNF} grammar is specified below:
 \end{grammar}
 
 
-The parsed output is then converted to the ICU Date Format Language described in Section IIA in order to effectively cross-validate results from the MDL algorithm. While this grammar accounts for the use of meridian markers `a.m.' and `p.m.' for the 12-hour format, ICU does not support these tokens, and they are simply ignored.
+The parsed output is then converted to the ICU Date Format Language in order to effectively cross-validate results from the MDL algorithm. While this grammar accounts for the use of meridian markers `a.m.' and `p.m.' for the 12-hour format, ICU does not support these tokens, and they are simply ignored.
 
 \subsection{Grammar Variants and Constraints}
 
@@ -81,10 +83,10 @@ In Equation $2$ the number of days for \texttt{August} through \texttt{December}
 
 
 \item \textbf{LeapYear Restriction for \texttt{February}}:
-While the above restriction applies to all months barring \texttt{February}, we also apply a constraint to the number of days for \texttt{February}, based on whether the year is leap year or not. For this, we define a new symbol in the grammar called \texttt{LeapYear}. If an expression containing the month \texttt{`February'} or any such variant (\textit{e.g.} \texttt{`Feb'}, \texttt{`2'}) with the day \texttt{`29'} and a year, would need to resolve the \texttt{Year} symbol to be a \texttt{LeapYear}, defined as $\texttt{Year} \Mod 4 == 0$.
+While the above restriction applies to all months barring \texttt{February}, we also apply a constraint to the number of days for \texttt{February}, based on whether the year is leap year or not. For this, we define a new symbol in the grammar called \texttt{LeapYear}. If an expression containing the month \texttt{`February'} or any such variant (\textit{e.g.} \texttt{`Feb'}, \texttt{`2'}) with the day \texttt{`29'} and a year, would need to resolve the \texttt{Year} symbol to be a \texttt{LeapYear}, defined as $\texttt{Year} \Mod 4 == 0$. However, this is just an approximation. The Gregorian calendar also requires that a year evenly divisible by $100$ (\textit{e.g.}, 1800) is a leap year only if it is also evenly divisible by $400$. 
+
 \end{itemize}
 
-However, Equation $4$ is just an approximation. The Gregorian calendar also requires that a year evenly divisible by $100$ (\textit{e.g.}, 1800) is a leap year only if it is also evenly divisible by $400$. Equations $3$ and $4$ are now added as constraints to the \texttt{Days} symbol in the grammar.
 
 \subsection{Probabilistic Context-Free Grammar}
 
@@ -92,15 +94,15 @@ Pattern-recognition problems such as parsing date and time formats initiate from
 
 In the context of CFGs, probabilities have been used to define a probability distribution over a set of parse trees defined by the CFG, and are a useful method for modeling such ambiguity~\cite{Collins:2003,Manning:1999}. The resulting formalism called \textit{Probabilistic Context-Free Grammar} (PCFG), extends the CFG by assigning probabilities to the production rules of the grammar. During the process of parsing the date-time pattern, the probabilities are used to rank the pattern(s) that a given string resolves to in the grammar. 
 
-The production rules are of the form $ X \rightarrow \beta$ where $X$ is the left-hand side of the rule, while $\beta$ is the right-hand side.
 
-Given a CFG grammar $G$, we define  $\tau_G(s)$ as the set of all possible parse trees for input date-time string $s$.  For any $X \rightarrow \beta \in \tau(G)$, the probability $p(X \rightarrow \beta) \ge 1$. In addition, $\sum_{(X \rightarrow \beta) \in \tau_{G}} = 1$. The parser then chooses the parse tree with the maximum probability, \textit{i.e.} given a date-time string $s$, as input, we determine the highest scoring parse tree $X \rightarrow \beta$ as  $max_{(X \rightarrow \beta) \in \tau(s)} p(X \rightarrow \beta)$.
+Given a CFG grammar $G$, the production rules are of the form $ X \rightarrow \beta$ where $X$ is the left-hand side of the rule, while $\beta$ is the right-hand side. We define  $\tau_G(s)$ as the set of all possible parse trees for input date-time string $s$.  For any $X \rightarrow \beta \in \tau(G)$, the probability $p(X \rightarrow \beta) \ge 1$. In addition, $\sum_{(X \rightarrow \beta) \in \tau_{G}} = 1$. The parser then chooses the parse tree with the maximum probability, \textit{i.e.} given a date-time string $s$, as input, we determine the highest scoring parse tree $X \rightarrow \beta$ as  $max_{(X \rightarrow \beta) \in \tau(s)} p(X \rightarrow \beta)$.
 
 
-Assigning initial probability weights to the grammar for computing the parse with the highest weight, tends to be a more scalable and flexible approach to disambiguation rather than building a deep knowledge ontology. We bootstrap the probability weights in the \texttt{PCFG}, by setting initial probability weights to the grammar rules as follows:
+Assigning initial probability weights to the grammar for computing the parse with the highest weight, tends to be a more scalable and flexible approach to disambiguation rather than building a deep knowledge ontology. We bootstrap the probability weights in the \texttt{PCFG} as follows:
 
 \begin{itemize}
-\item Similar to the MDL ranking properties described in Section IIIG, rules involving the non-terminal \texttt{DateGrammar} on the left-side of the rule, are assigned probability weights higher than those rules with the non-terminal being \texttt{TimeGrammar}. In practice, assigning $p(\texttt{DateGrammar} \rightarrow \beta_{1}) = 0.9$ and $p(\texttt{TimeGrammar} \rightarrow \beta_{2}) = 0.7$ leads to optimal ranking of the parse trees.
+\setlength\itemsep{0em}
+\item Similar to the MDL ranking properties, rules involving the non-terminal \texttt{DateGrammar} on the left-side of the rule, are assigned probability weights higher than those rules with the non-terminal being \texttt{TimeGrammar}. In practice, assigning $p(\texttt{DateGrammar} \rightarrow \beta_{1}) = 0.9$ and $p(\texttt{TimeGrammar} \rightarrow \beta_{2}) = 0.7$ leads to optimal ranking of the parse trees.
 
 \item For the non-terminal symbol \texttt{Day}, the constraint specified is a range between $01$ and $28-31$, depending on month/year. However, for \texttt{dd} $> 12$, $p(\texttt{Day} \rightarrow d d) = 1.0$, and $0.5$ otherwise. This assignment helps disambiguate days from months.
 
@@ -111,7 +113,7 @@ Assigning initial probability weights to the grammar for computing the parse wit
 
 \subsection{Supervised Learning}
 
-Having defined initial probabilistic weights to the \texttt{PCFG}, we employ supervised learning with a known training set of date time formats to estimate the rule probabilities.  The training corpus is a set of files obtained from an online data analysis corpus, described in Section 6.
+Having defined initial probabilistic weights to the \texttt{PCFG}, we employ supervised learning with a known training set of date time formats to estimate the rule probabilities.  The training corpus is a set of files obtained from an online data analysis corpus, described in Section 5.
 
 The occurrence frequencies of the rules in the correct
 (disambiguated) parse trees can be determined from the corpus using the maximum-likelihood parameter estimates.
@@ -128,4 +130,4 @@ The grammar parser's success is often limited by data ambiguity, and incomplete 
 
 The CKY parser is run over the same set of samples from each validation file to generate a probabilistic distribution of possible parse trees corresponding to a set of date-time patterns. As a second pass of the parser, starting from the most probable parse tree, each parse tree is then applied to the entire file's columnar data to determine the dominant pattern. For example, another entry in the same dataset could be \texttt{`25/3/2007'} thus increasing the probability that the format is \texttt{dd/mm/yyyy} as opposed to \texttt{mm/dd/yyyy}.
 
-In addition to the columnar data context, the locale is also used to help maximize the probabilistic likelihood of a particular date-time pattern. The locale of the data column is used to retrieve the corresponding corpora for helping with the parsing and for correcting syntactical errors. However, similar to the locale sensitivity issue described in Section IIIF, the locale and the data may not always match. The dominant pattern is simply computed over the data column based on the ranked set of parse tree results.
+In addition to the columnar data context, the locale is also used to help maximize the probabilistic likelihood of a particular date-time pattern. The locale of the data column is used to retrieve the corresponding corpora for helping with the parsing and for correcting syntactical errors. However, similar to the locale sensitivity issue described in Section 3.6, the locale and the data may not always match. The dominant pattern is simply computed over the data column based on the ranked set of parse tree results.

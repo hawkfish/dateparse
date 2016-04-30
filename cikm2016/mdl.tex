@@ -59,7 +59,6 @@ The pruning rules used for the structure extraction reduce the search space dram
 \item Two digit years require special handling. In particular, they cannot appear adjacent to a two-digit field if the structure contains punctuation. (This can come up in some small early 21st century year domains where a two-digit year can masquerade as almost any numeric field \eg $08$ for $2008$.)
 \end{itemize}
 
-These global pruning rules are simple and intuitive, but are essential to further reducing the search space.
 
 \subsection{Locale Sensitivity}
 Providing an acceptable international user experience requires correctly handling the locale of the column text. Accordingly, at the start of the structure extraction we use the column locale to create a set of domains containing locale-sensitive strings such as month names. We also use the locale to map these strings to upper- and lower-case in addition to the ICU mixed case strings. This enables us to accurately compute MDL statistics without having to map the candidate strings at runtime (which would be slow).
