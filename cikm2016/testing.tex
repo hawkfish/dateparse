@@ -75,11 +75,13 @@ The validation speed is the average time needed to parse a value, and provides a
 \label{fig:M2}
 \end{figure}
 
-The error rate reflects the fact that only about 40\% of the files have an associated format that parses the non-null values without error. To examine the error rate in greater detail, we turn now to Figure \ref{fig:M2}.
+The error rate reflects the fact that only about 40\% of the files have an associated format that parses the non-null values without error. To examine the error rate in greater detail, we turn now to Figure~\ref{fig:M2}.
 
-On the left hand side, we can see that the algorithm found 744 distinct formats that parsed 13,424 files with no error. This is a remarkable number of valid formats and underscores the need for this kind of algorithm. Raising the error rate threshold to 5\% results in about 2500 formats found in 15,000 files, or nearly half of the files. 
+The two horizontal reference lines in Figure~\ref{fig:M2} show that we found 744 distinct formats that parsed the $13,424$ associated files with no error. 
+This is a remarkable number of distinct formats and underscores the need for this kind of algorithm. 
+Raising the error rate threshold to $5\%$ results in about $2500$ formats found in $15,000$ files, or nearly half of the files in the corpus. 
 
-What do these formats look like? Figure \ref{fig:M3} shows a histogram of the 25 most common formats containing a year format code at the 5\% threshold, color-coded by error rate. (A sample value is provided to the right of each bar for illustrative purposes.) The formats have also been filtered to files with at least 5 samples. Most of the samples are clearly dates with a wide range of formats (the format where the time zone is between the time and the year is surprisingly common.)
+What do these formats look like? Figure~\ref{fig:M3} shows a histogram of the $25$ most common formats containing a year format code at the $5\%$ error threshold, color-coded by error rate. (A sample value is provided to the right of each bar for illustrative purposes.) The formats have also been filtered to files with at least $5$ samples. Most of the samples are clearly dates with a wide range of formats (the format where the time zone is between the time and the year is surprisingly common.)
  
 \begin{figure}[ht]
 \centering
