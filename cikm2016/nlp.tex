@@ -74,12 +74,9 @@ While custom production rules can be added to the existing grammar to exclude su
 \begin{itemize}
 \setlength\itemsep{0em}
 \item \textbf{Restriction on the distribution of $30$ and $31$}:
-Months usually alternate between lengths of $30$ and $31$ days. We use $x \Mod 2$ to get an alternating pattern of 1 and 0, and then add the constant base number of days, $\texttt{Day} = 30 + x \Mod 2$, where $x \in [1..12]$ months.
+Months usually alternate between lengths of $30$ and $31$ days. We use $x \Mod 2$ to get an alternating pattern of 1 and 0, and then add the constant base number of days, $\texttt{Day} = 30 + (x + 1) \Mod 2$, where $x \in [1..12]$ months.
 
-Except for \texttt{February}, Equation $1$ addresses \texttt{January} and \texttt{March} through \texttt{July}. After \texttt{July}, the pattern should skip one, and the rest of the months should follow the alternating pattern inversely. To obtain an inverse pattern of alternating 0 and 1, we add 1 to the dividend:
-$\texttt{Day} = 30 + (x + 1) \Mod 2$.
-
-In Equation $2$ the number of days for \texttt{August} through \texttt{December} is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Multiplying a term by this expression will result in the term being cancelled out outside its domain. To mask the latter piece of our function, we need an expression equal to $1$ where $8 \le x\le 12$. Floor division by 8 works well, since $x < 16$. Substituting this expression in the $x + 1$ dividend of Equation $2$, we can invert the pattern using our mask: $\texttt{Day} = 30 + (x + \floor{\frac{x}{8}}) \Mod 2$.
+In the above equation, the number of days for \texttt{August} through \texttt{December} is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Substituting this expression in the $x + 1$ dividend of the equation, we can invert the pattern using our mask: $\texttt{Day} = 30 + (x + \floor{\frac{x}{8}}) \Mod 2$.
 
 
 \item \textbf{LeapYear Restriction for \texttt{February}}:
