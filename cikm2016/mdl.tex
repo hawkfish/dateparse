@@ -4,14 +4,14 @@ The first algorithm is a Minimum Descriptive Length~\cite{Rissanen:1978} approac
 Potter's Wheel presents an algorithm for deriving a common structure for a set of strings by breaking each string down into a sequence of \textit{domains}. A domain is a set of strings, with a few optional statistical properties. They are defined by an interface that includes:
 \begin{itemize}
 \setlength\itemsep{0em}
-\item A required inclusion function to test for membership in the domain (\functionname{match}). 
+\item A required inclusion function \functionname{match} to test for membership in the domain
 (\eg the domain \functionname{<Digits>} returns true for \functionname{"123"} 
 and false for \functionname{"abc"}.)
-\item An optional function to compute the number of values in the domain with a given length (\functionname{cardinality}).
+\item An optional function \functionname{cardinality} to compute the number of values in the domain with a given length
 (\eg the domain for three letter month names (\functionname{MMM}) would return $12$ for the length $3$ and $0$ otherwise.)
-\item An optional function to update statistics for the domain based on a given value (\functionname{updateStatistics}).
+\item An optional function \functionname{updateStatistics} to update statistics for the domain based on a given value
 (\eg the domain \functionname{MMM} might keep a histogram of how frequently each month was encountered.)
-\item An optional function to prevent consideration of a domain that is redundant (\functionname{isRedundantAfter}).
+\item An optional function \functionname{isRedundantAfter} to prevent consideration of a domain that is redundant.
 (\eg  the domain \functionname{<Digits>} would be redundant after itself because there is no difference between a single run of digits and two adjacent runs.)
 \end{itemize}
 
