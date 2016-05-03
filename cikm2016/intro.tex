@@ -43,9 +43,9 @@ Quantitative dates are typically used for time series on an axis that maps the u
 These types of visualizations are difficult to specify with simple categorical string representations of dates.
 
 \subsection{Parsing Dates}
-A common version of the date parsing problem is converting columns of integers in the form \texttt{yyyyMMdd} to date scalars. \Naive\ users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date. Unfortunately, this approach has a number of problems because string operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSes). Default parsing of date formats is locale-dependent, and may not work when the parsing expression is shared across an international organization (\eg between the US and European offices). The parsing code is often hard to understand and maintain because it uses a verbose, general-purpose string-handling syntax instead of a specialized domain language.
+A common version of the date parsing problem is converting columns of integers in the form \texttt{yyyyMMdd} to date scalars. \Naive\ users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date. Unfortunately, this approach has a number of problems because string operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSs). Default parsing of date formats is locale-dependent, and may not work when the parsing expression is shared across an international organization (\eg between the US and European offices). The parsing code is often hard to understand and maintain because it uses a verbose, general-purpose string-handling syntax instead of a specialized domain language.
 
-In Section~\ref{sec:experiments} we show that there are \textit{hundreds} of distinct temporal date formats in user data sets (\cf Figure~\ref{fig:M2}).
+In Section~\ref{sec:experiments} we show that there are \textit{hundreds} of distinct temporal date formats in user data sets (Figure~\ref{fig:M2}).
 Some are common, but others can be quite idiosyncratic. 
 Table~\ref{tab:dateformats} shows a selection of unusual date formats found in our corpus (the meanings of the ICU formatting codes can be found in Table~\ref{tab:icuformats}). 
 The first example shows a time zone in the middle of the date and a year after the time; 
@@ -74,7 +74,7 @@ so a static enumeration of a small set of formats will not produce high reliabil
 \label{tab:dateformats}
 \end{table}
 
-Several RDBMSes (\eg MySQL, Oracle and Postgres) provide row-level functions for parsing formatted dates, but a simple review of user attempts to use this functionality in published analyses showed a $15\%$ syntax error rate when using these functions unassisted. And even with perfect syntax, the user still has to interrupt her flow to learn a formatting syntax -- one that she will likely forget after this specific problem has been solved.
+Several RDBMSs (\eg MySQL, Oracle and Postgres) provide row-level functions for parsing formatted dates, but a simple review of user attempts to use this functionality in published analyses showed a $15\%$ syntax error rate when using these functions unassisted. And even with perfect syntax, the user still has to interrupt her flow to learn a formatting syntax -- one that she will likely forget after this specific problem has been solved.
 
 One solution might have been to design a graphical environment for constructing valid patterns and using visually compelling representations to reduce the cognitive load. 
 Yet this approach provide no guarantee that the result would be correct if the user misunderstood the environment. 
@@ -82,9 +82,11 @@ Moreover, this approach only solves the syntax problem -- the user is still requ
 
 Our solution was to develop two algorithms for automatically deriving the format string from the user's data with over $95\%$ parsing accuracy. Both algorithms are built based on classical machine learning algorithms that learn from pattern recognition to make data-driven predictions. We developed two algorithms because we were unaware of any previous work on this problem and we needed to be able to cross-validate our results on a large test corpus. With both approaches, the user can simply specify that the column is a date, and the visualization system can respond quickly and accurately enough to avoid interrupting the user's flow.
 
+\vidya{should this be its own section?}
 \subsection{Related Work}
 \input{relatedwork}
 
+\vidya{should this be its own section?}
 \subsection{Contributions}
 
 \begin{itemize}
