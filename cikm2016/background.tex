@@ -1,6 +1,7 @@
 \subsection{The ICU Date Format Language}
 
-The choice of a date format syntax for generation is somewhat arbitrary, but for the purposes of exposition we will be using the formatting language defined by the ICU open-source project~\cite{ICU}. We chose this format because we were already using ICU in our system, we had access to the source code, and it provides localized date part data for a large number of languages (\eg month names). ICU's format syntax is typical of most syntax languages and provides a large number of date part codes, and a summary of it is reproduced in Table 2. The complete syntax is documented at the ICU web site.  Other syntaxes can either be generated directly from the algorithms, or by translating the ICU syntax into into the desired syntax. (In fact, this latter approach is how our visualization system internally generates formats for RDBMSs that have non-ICU syntax.)
+The choice of a date format syntax for generation is somewhat arbitrary, but for the purposes of exposition we will be using the formatting language defined by the ICU open-source project~\cite{ICU}. We chose this format because we were already using ICU in our system, we had access to the source code, and it provides localized date part data for a large number of languages (\eg month names). ICU's format syntax is typical of most syntax languages and provides a large number of date part codes, and a representative subset of it is reproduced in Table~\ref{tab:icuformats}. The complete syntax is documented at the ICU web site \cite{ICU}.  Other syntaxes can either be generated directly from the algorithms, or by translating the ICU syntax into into the desired syntax. 
+(The latter is how our visualization system internally generates formats for RDBMSs that have non-ICU syntax.)
 %\vidya{do we need the whole table here?}
 %\richard{Chopped it down some more and removed multi-line descriptions. All we really need to get across is that there are lots of different time zones, etc., so  fewer examples are OK I think.}
 \begin{table}[ht]
@@ -52,7 +53,8 @@ The choice of a date format syntax for generation is somewhat arbitrary, but for
 \label{tab:icuformats}
 \end{table}
 
-While fairly extensive, the ICU syntax has a few limitations when working with real-world data. It has no support for 4-letter month abbreviations (\eg \texttt{Sept.}), ordinal days (\eg \texttt{July 4th}), quarter postfix notation (\eg \texttt{2Q}) and variant meridian markers (\eg \texttt{a.m.}). These limitations did not affect the results significantly, and in the future we hope to submit ICU extensions to handle some of these formats. 
+While fairly extensive, the ICU syntax has a few limitations when working with real-world data. It has no support for 4-letter month abbreviations (\eg \texttt{Sept.}), ordinal days (\eg \texttt{July 4th}), quarter postfix notation (\eg \texttt{2Q}) and variant meridian markers (\eg \texttt{a.m.}). 
+These limitations did not affect the results significantly, and in the future we hope to submit handlers for these formats to the ICU project. 
 
 \subsection{The \dateparse\ Function}
 
