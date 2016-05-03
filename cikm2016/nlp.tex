@@ -74,9 +74,7 @@ While custom production rules can be added to the existing grammar to exclude su
 \begin{itemize}
 \setlength\itemsep{0em}
 \item \textbf{Restriction on the distribution of $30$ and $31$}:
-Months usually alternate between lengths of $30$ and $31$ days. We use $x \Mod 2$ to get an alternating pattern of 1 and 0, and then add the constant base number of days, $\texttt{Day} = 30 + (x + 1) \Mod 2$, where $x \in [1..12]$ months.
-
-In the above equation, the number of days for \texttt{August} through \texttt{December} is correct ($x \in [8..12]$), but not for the remaining months. We hence introduce a bit-masking function so that the equation is equal to 1 over the desired domain and 0 otherwise. Substituting this expression in the $x + 1$ dividend of the equation, we can invert the pattern using our mask: $\texttt{Day} = 30 + (x + \floor{\frac{x}{8}}) \Mod 2$.
+Months usually alternate between lengths of $30$ and $31$ days. We use $x \Mod 2$ to get an alternating pattern of 1 and 0, and then add the constant base number of days, $\texttt{Day} = 30 + (x + 1) \Mod 2$, where $x \in [1..12]$ months. We then add a bit-masking function to the equation to correctly account for the number of days for \texttt{August} through \texttt{December} ($x \in [8..12]$): $\texttt{Day} = 30 + (x + \floor{\frac{x}{8}}) \Mod 2$.
 
 
 \item \textbf{LeapYear Restriction for \texttt{February}}:
