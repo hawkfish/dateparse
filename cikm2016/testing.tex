@@ -62,7 +62,9 @@ Testing of the MDL algorithm was performed on a 24-core Dell T7610 running Windo
 
 To test the MDL algorithm, we ran it over the set of samples from each validation file to generate a ranked list of formats for the file. Each format was then applied to the entire file's data set, recording both the number of errors and the elapsed times. In cases where we generated multiple formats and the main format produced errors, we applied the second format to the unparsed strings. The summary statistics from this processing are presented in Table~\ref{tab:mdlstats}.
 
-The analysis speed is the average time needed per sample for structure extraction. At 2.5ms, this is well below most human perceptual thresholds for a set of 32 samples, so any latency in command execution would be restricted to the ability of the underlying database to provide the samples for analysis in a timely manner. A columnar database (such as the one underlying our visualization system) can often supply such domains without a full table scan, further improving responsiveness.
+The analysis speed is the average time needed per sample for structure extraction. 
+At $2.2ms$, this is well below most human perceptual thresholds for a set of $32$ samples, so any latency in command execution would be restricted to the ability of the underlying database to provide the samples for analysis in a timely manner. 
+A columnar database (such as the one underlying our visualization system) can often supply such domains without a full table scan, further improving responsiveness.
 
 The validation speed is the average time needed to parse a value, and provides an estimate of how fast the ICU implementation can process string values into scalars and works out to 620K values per core per second.
  
@@ -70,26 +72,26 @@ The validation speed is the average time needed to parse a value, and provides a
 \centering
 \includegraphics[width=\columnwidth]{figures/FigureM2}
 \caption{MDL Error Rate}
-\label{fig:M2}
+\label{fig:mdlerror}
 \end{figure}
 
-The error rate reflects the fact that only about 40\% of the files have an associated format that parses the non-null values without error. To examine the error rate in greater detail, we turn now to Figure~\ref{fig:M2}.
+The error rate reflects the fact that only about $40\%$ of the files have an associated format that parses the non-null values without error. To examine the error rate in greater detail, we turn now to Figure~\ref{fig:mdlerror}.
 
-The two horizontal reference lines in Figure~\ref{fig:M2} show that we found 744 distinct formats that parsed the $13,424$ associated files with no error. 
+The two horizontal reference lines in Figure~\ref{fig:mdlerror} show that we found 744 distinct formats that parsed the $13,424$ associated files with no error. 
 This is a remarkable number of distinct formats and underscores the need for this kind of algorithm. 
 Raising the error rate threshold to $5\%$ results in about $2500$ formats found in $15,000$ files, or nearly half of the files in the corpus. 
 
-What do these formats look like? Figure~\ref{fig:M3} shows a histogram of the $25$ most common formats containing a year format code at the $5\%$ error threshold, color-coded by error rate. (A sample value is provided to the right of each bar for illustrative purposes.) The formats have also been filtered to files with at least $5$ samples. Most of the samples are clearly dates with a wide range of formats (the format where the time zone is between the time and the year is surprisingly common.)
+What do these formats look like? Figure~\ref{fig:mdloutput} shows a histogram of the $25$ most common formats containing a year format code at the $5\%$ error threshold, color-coded by error rate. (A sample value is provided to the right of each bar for illustrative purposes.) The formats have also been filtered to files with at least $5$ samples. Most of the samples are clearly dates with a wide range of formats (the format where the time zone is between the time and the year is surprisingly common.)
  
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\columnwidth]{figures/FigureM3}
 \caption{MDL Output}
-\label{fig:M3}
+\label{fig:mdloutput}
 \end{figure}
 
 Some of the dates are clearly just numbers, but our approach is to assume that when the user tells us that the column contains dates we should find the best fit. 
-The samples include dates from a wide range of historical sources (\eg Roman pottery dates) so we have elected to defer the date identification task to the user.
+The samples include dates from a wide range of historical sources (\eg Roman pottery dates) so we have elected to defer the semantic identification task to the user.
 
 \subsection{Natural Language Processing}
 
@@ -100,7 +102,7 @@ Similar to the MDL algorithm, the CYK parser is run over the same set of samples
 The initial average parsing speed to compute the ranked set of probable parse trees is $0.93s$, while the average time taken to compute the overall dominant pattern(s) for the entire column of data is $1.4s$. While the natural language parsing implementation is in Python as the NLTK package is easily configurable, we could expect greater speed-up in parsing performance by employing C/C++ CYK parsing libraries.
 
 
-Out of the $31,546$ files used for testing, the NLP parser identified a dominant format for $26, 534 (84.11\%)$ where $p >= 0.5$. $1634$ unique formats were identified. Figure \ref{fig:NLP1} shows a histogram of the most common formats identified containing \texttt{Year}. There are some variations compared to Figure \ref{fig:M3} including the fact that we are not filtering the results by any error rate in the NLP parsed results.
+Out of the $31,546$ files used for testing, the NLP parser identified a dominant format for $26, 534 (84.11\%)$ where $p >= 0.5$. $1634$ unique formats were identified. Figure \ref{fig:NLP1} shows a histogram of the most common formats identified containing \texttt{Year}. There are some variations compared to Figure \ref{fig:mdloutput} including the fact that we are not filtering the results by any error rate in the NLP parsed results.
 
 \begin{figure}[ht]
 \centering
