@@ -52,7 +52,7 @@ Both of these examples are much easier for users to specify and manipulate when 
 \subsection{Parsing Dates}
 A common form of the date parsing problem is converting columns of integers in the form \texttt{yyyyMMdd} to date scalars. \Naive\ users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date, but this approach has a number of drawbacks. String operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSs). Default parsing of date formats is locale-dependent, and may not work when the parsing expression is shared across an international organization (\eg between the US and European offices). Such \textit{ad hoc} parsing code is often hard to understand and maintain because it uses a verbose, general-purpose string-handling syntax instead of a specialized domain language.
 
-In Section~\ref{sec:experiments} we show that there are \emph{hundreds} of distinct temporal date formats in user data sets (Figure~\ref{fig:M2}).
+In Section~\ref{sec:experiments} we show that there are \emph{hundreds} of distinct temporal date formats in user data sets (Figure~\ref{fig:mdlerror}).
 Some are common, but others can be quite idiosyncratic. 
 Table~\ref{tab:dateformats} shows a selection of unusual date formats found in our corpus (the meanings of the ICU formatting codes can be found in Table~\ref{tab:icuformats}). 
 The first example shows a time zone in the middle of the date and a year after the time; 
