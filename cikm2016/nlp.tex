@@ -1,4 +1,4 @@
-\vidya{need to add a short intro here}
+The second algorithm is a natural language approach to parsing date and time formats. While regular expressions can be used to match strings to known formats, we chose a grammar approach as a generalization of regular expressions. Such an approach provides for greater expressibility and less rigidity, without the expectation of the input string to exactly match against one or more of the known formats. We describe a particular form of grammar called a context-free grammar approach as well as extensions to the rules of the grammar that are inherent to date and time properties such as grammar variants, constraints, and assigning probabilistic weighting through a supervised learning approach.
 
 \subsection{Context-Free Grammar}
 ICU date formats are well defined both structurally and semantically, and can be defined by a context-free grammar (CFG). This has several advantages. First, it allows for modular syntax definitions, which simplifies grammar development and enables reuse. Second, it grants total freedom in structuring a grammar to best fit its intended use. The power of such a grammar is its expressiveness, and is not constrained by pattern rigidities that are prevalent with regular expressions and text processing~\cite{Grune:1990}.
@@ -32,30 +32,30 @@ A portion of the \textit{EBNF} grammar is specified below:
 
 <QuarterYear> := <Quarter> <Year>;
 
-%<Day>     ::= dd (where $dd \in [01-31]$, depending on month/year);
+<Day>     ::= dd (where $dd \in [01-31]$, depending on month/year);
 
-%<Month> := <MonthWord> | <MonthNumber>;
+<Month> := <MonthWord> | <MonthNumber>;
 
-%<MonthWord> := `January' | `February' | `March' | `April' | `May' | `June' | `July' | `August' | `September' | `October' | `November' | `December';
-%
-%<MonthNumber> := dd (where $dd \in [01-12]$);
-%
+<MonthWord> := `January' | `February' | `March' | `April' | `May' | `June' | `July' | `August' | `September' | `October' | `November' | `December';
+
+<MonthNumber> := dd (where $dd \in [01-12]$);
+
 %<DayOfWeek> ::= `Monday' | `Tuesday' | `Wednesday' | `Thursday' | `Friday' | `Saturday' | `Sunday';
-%
+
 %<Hour> ::= <TwelveHour> | <TwentyFourHour>;
-%
+
 %<Quarter> ::= `Quarter' dd (where $dd \in [01 - 04]$);
-%
+
 %<TwoYear> ::= dd;
-%
+
 %<FourYear> := dddd;
-%
+
 %<TwelveHour> ::= dd (where $dd \in [00-12]$);
-%
+
 %<TwentyFourHour> ::= dd (where $dd \in [00 -23]$);
-%
+
 %<AMPM> := `a.m.' | `p.m.';
-%
+
 %<d> ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9';
 
 \end{grammar}
