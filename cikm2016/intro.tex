@@ -20,7 +20,7 @@ Streamlining this task is the focus of this paper.
 
 The SQL-99 standard defines three temporal scalar types: \functionname{DATE}, \functionname{TIMESTAMP} and \functionname{TIME}, 
 which can be further qualified as either \functionname{WITH} or \functionname{WITHOUT} \functionname{TIME ZONE} (the \functionname{WITHOUT} form being more common.) 
-These types are typically implemented as fixed-point offsets from some epoch (\eg Julian Days.) 
+These types are typically implemented as fixed-point offsets from some epoch (\textit{e.g.}, Julian Days.) 
 This makes them compact to store using columnar compression techniques such as those in C-Store~\cite{Stonebraker:2005} and MonetDB/X100~\cite{Zukowski:2006}, 
 and further allows some temporal operations to be implemented efficiently using simple arithmetic. 
 Thus from the RDBMS perspective, representing dates in scalar form provides benefits for users, both in terms of analytic richness and query performance.
@@ -50,7 +50,7 @@ Both of these examples are much easier for users to specify and manipulate when 
 
 
 \subsection{Parsing Dates}
-A common form of the date parsing problem is converting columns of integers in the form \texttt{yyyyMMdd} to date scalars. \Naive\ users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date, but this approach has a number of drawbacks. String operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSs). Default parsing of date formats is locale-dependent, and may not work when the parsing expression is shared across an international organization (\eg between the US and European offices). Such \textit{ad hoc} parsing code is often hard to understand and maintain because it uses a verbose, general-purpose string-handling syntax instead of a specialized domain language.
+A common form of the date parsing problem is converting columns of integers in the form \texttt{yyyyMMdd} to date scalars. \Naive\ users often solve this problem by converting the integer to a string and performing some locale-dependent string operations before casting the string back to a date, but this approach has a number of drawbacks. String operations are notoriously slow compared to scalar operations (typically 10-100x slower in modern RDBMSs). Default parsing of date formats is locale-dependent, and may not work when the parsing expression is shared across an international organization (\textit{e.g.}, between the US and European offices). Such \textit{ad hoc} parsing code is often hard to understand and maintain because it uses a verbose, general-purpose string-handling syntax instead of a specialized domain language.
 
 In Section~\ref{sec:experiments} we show that there are \emph{hundreds} of distinct temporal date formats in user data sets (Figure~\ref{fig:mdlerror}).
 Some are common, but others can be quite idiosyncratic. 
@@ -81,10 +81,10 @@ so a small, fixed set of formats will not produce high reliability.
 \label{tab:dateformats}
 \end{table}
 
-Several RDBMSs (\eg MySQL, Oracle and Postgres) provide row-level functions for parsing formatted dates, but a simple review of user attempts to use this functionality in published analyses showed a $15\%$ syntax error rate when using these functions unassisted. And even with perfect syntax, the user still has to interrupt her flow to learn a formatting syntax -- one that she will likely forget after this specific problem has been solved.
+Several RDBMSs (\textit{e.g.}, MySQL, Oracle and Postgres) provide row-level functions for parsing formatted dates, but a simple review of user attempts to use this functionality in published analyses showed a $15\%$ syntax error rate when using these functions unassisted. Even with perfect syntax, the user still has to interrupt her flow to learn a formatting syntax -- one that she will likely forget after this specific problem has been solved.
 
 One approach might have been to design a graphical environment for constructing valid patterns and using visually compelling representations to reduce the cognitive load. 
-But this approach provides no guarantee that the result would be correct if the user misunderstood the environment. 
+However, this approach provides no guarantee that the result would be correct if the user misunderstood the environment. 
 Moreover, it only solves the syntax problem -- the user is still required to switch contexts.
 
 Our solution was to develop two algorithms for automatically deriving the format string from the user's data with over $95\%$ parsing accuracy. Both algorithms are built based on classical machine learning algorithms that learn from pattern recognition to make data-driven predictions. We developed two algorithms because we were unaware of any previous work on this problem and we needed to be able to cross-validate our results on a large test corpus. With both approaches, the user can simply specify that the column is a date, and the visualization system can respond quickly and accurately enough to avoid interrupting the user's flow.
