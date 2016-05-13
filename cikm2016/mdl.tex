@@ -5,26 +5,26 @@ Potter's Wheel presents an algorithm for deriving a common structure for a set o
 \begin{itemize}
 \setlength\itemsep{0em}
 \item A required inclusion function \functionname{match} to test for membership in the domain
-(\eg the domain \functionname{<Digits>} returns true for \functionname{"123"} 
+(\textit{e.g.}, the domain \functionname{<Digits>} returns true for \functionname{"123"} 
 and false for \functionname{"abc"}.)
 \item An optional function \functionname{cardinality} to compute the number of values in the domain with a given length
-(\eg the domain for three letter month names (\functionname{MMM}) would return $12$ for the length $3$ and $0$ otherwise.)
+(\textit{e.g.}, the domain for three letter month names (\functionname{MMM}) would return $12$ for the length $3$ and $0$ otherwise.)
 \item An optional function \functionname{updateStatistics} to update statistics for the domain based on a given value
-(\eg the domain \functionname{MMM} might keep a histogram of how frequently each month was encountered.)
+(\textit{e.g.}, the domain \functionname{MMM} might keep a histogram of how frequently each month was encountered.)
 \item An optional function \functionname{isRedundantAfter} to prevent consideration of a domain that is redundant.
-(\eg  the domain \functionname{<Digits>} would be redundant after itself because there is no difference between a single run of digits and two adjacent runs.)
+(\textit{e.g.},  the domain \functionname{<Digits>} would be redundant after itself because there is no difference between a single run of digits and two adjacent runs.)
 \end{itemize}
 
-In our approach, we implement all of these functions, but with significant changes to \functionname{isRedundantAfter} (described below) to increase the level of pruning applied during
+In our approach, we implement all of these functions, but with significant changes to \functionname{isRedundantAfter} to increase the level of pruning applied during
 domain enumeration.
 
 With this interface, we can now define a set of domains for each date part that we wish to be able to parse. These are mostly straightforward enumerations and numeric ranges, each tagged with the ICU format code. Since the ICU parser is flexible about parsing single or double-digit formats, we use double-digit formats, but accept one or two digits. One important exception to this rule is for years, which are fixed width fields ($2$ or $4$).
 
 We found that the inclusion of arbitrary numeric domains caused the run time to grow exponentially as the number of possible matches could not be pruned intelligently. 
 This restriction extends to domains that can contain arbitrary digit sequences (such as \functionname{<Any>}). Because of this restriction, the algorithm cannot extract non-date numeric fields.
-
+%\vspace{2.1mm}
 \subsection{Redundancy Extensions} \label{subsec:mdl:redundancy}
-A difficulty in using this kind of structure extraction is that the algorithm for enumerating structures is exponential in the number of domains. This is especially true in the date format problem because there are identical domains (\eg months and meridian hours), nearly identical domains (\eg days and hours) and there are often no field delimiters (\eg \texttt{2012Mar06134427}). To handle this, we extend the original redundancy rules with two other sets of domain identifiers:
+A difficulty in using this kind of structure extraction is that the algorithm for enumerating structures is exponential in the number of domains. This is especially true in the date format problem because there are identical domains (\textit{e.g.}, months and meridian hours), nearly identical domains (\textit{e.g.}, days and hours) and there are often no field delimiters (\textit{e.g.}, \texttt{2012Mar06134427}). To handle this, we extend the original redundancy rules with two other sets of domain identifiers:
 \begin{itemize}
 \setlength\itemsep{0em}
 \item A set of \textit{prunable} identifiers, which are not allowed to precede the domain. For example, once we have a month field, no other month fields should be generated. Each month domain therefore lists all the month domains in its prunable set.
@@ -37,7 +37,7 @@ Structure enumeration is computationally expensive, so we have added a number of
 \subsubsection{Domain Characteristics}
 Date domains typically have small widths, so we found it advantageous to provide the shortest and longest match sizes for use in structure enumeration and matching. For example, months have between $1$ and $2$ digits, so there is no need to test matches whose length is outside this range.
 
-Date domains are also often \emph{uniform} in that adding more characters to a mismatch will not help. \eg a $2$-digit day domain that does not match a $1$-letter substring will not be able to generate a match by adding more characters.
+Date domains are also often \emph{uniform} in that adding more characters to a mismatch will not help. For example, a $2$-digit day domain that does not match a $1$-letter substring will not be able to generate a match by adding more characters.
 
 \subsubsection{Parallel Evaluation}
 We have also identified two opportunities for parallel computation during structure enumeration.
@@ -47,10 +47,10 @@ Once the list has been generated, the evaluation of each independent structure (
 
 \subsection{Unparameterization}
 Domain parameterization is an important part of generating compact representations via MDL, but it creates problems for date recognition. 
-If (say) a set of dates contains a constant month string (\eg all values are in September) it is important to keep track of the month name domain
+If (say) a set of dates contains a constant month string (\textit{e.g.}, all values are in September) it is important to keep track of the month name domain
 so that the \dateparse\ function will parse the month.
 When we parameterize a constant generic \functionname{<Word>} domain, we therefore tag it with any date part domain that it matched. 
-We then need to apply an additional pruning step to remove any structures that also found an equivalent domain (\eg two-digit month). 
+We then need to apply an additional pruning step to remove any structures that also found an equivalent domain (\textit{e.g.}, two-digit month). 
 These rules are equivalent to the context-based redundancy rules in Section~\ref{subsec:mdl:redundancy}, but have to be applied again after the parameterization of generics.
 
 \subsection{Global Pruning}
@@ -59,10 +59,10 @@ The domains also contain a fair amount of ambiguity that requires the applicatio
 This made it necessary to add some post-generation global pruning rules:
 \begin{itemize}
 \setlength\itemsep{0em}
-\item The set of date parts cannot contain place value gaps (\eg structures that have year and day without month are removed.)
+\item The set of date parts cannot contain place value gaps (\textit{e.g.}, structures that have year and day without month are removed.)
 \item Similarly, the set of time parts cannot contain place value gaps and must also be in place value order (times are never written in orders such as \functionname{mhs}.)
-\item The existence of time parts cannot make dates incomplete (\eg patterns like year-day-hour are removed.)
-\item Two digit years require special handling. In particular, they cannot appear adjacent to a two-digit field if the structure contains any punctuation. (This can come up in some small early 21st century year domains where a two-digit year can masquerade as almost any numeric field \eg $08$ for $2008$.)
+\item The existence of time parts cannot make dates incomplete (\textit{e.g.}, patterns like year-day-hour are removed.)
+\item Two digit years require special handling. In particular, they cannot appear adjacent to a two-digit field if the structure contains any punctuation. (This can come up in some small early 21st century year domains where a two-digit year can masquerade as almost any numeric field \textit{e.g.}, $08$ for $2008$.)
 \end{itemize}
 
 
@@ -71,19 +71,19 @@ Providing an acceptable international user experience requires correct handling 
 Accordingly, at the start of the structure extraction we use the locale to create a set of domains containing locale-sensitive strings such as month names. We also use the locale to map these strings to upper- and lower-case in addition to the ICU mixed case strings. 
 This enables us to accurately compute MDL statistics without having to map the input strings at runtime (which would be slow).
 
-Knowing the locale of a string is not always helpful. In our test data, we found numerous cases where the locale was specified (\eg Sweden) but the data was actually in English. Accordingly, we test both locales and rank the combined results. 
+Knowing the locale of a string is not always helpful. In our test data, we found numerous cases where the locale was specified (\textit{e.g.}, Sweden) but the data was actually in English. Accordingly, we test both locales and rank the combined results. 
 
-We have built this system for the Gregorian calendar as we have little evidence of other calendars (\eg Hebrew, Islamic Civil) being used for analytics. 
+We have built this system for the Gregorian calendar as we have little evidence of other calendars (\textit{e.g.}, Hebrew, Islamic Civil) being used for analytics. 
 ICU supports non-Gregorian calendars and we expect the algorithm could be extended to them as well if needed.
 
 \subsection{Ranking}
 MDL structure analysis produces a ranked list of format candidates, but we have found that a number of other properties of the formats should be preferred over simple compactness:
 \begin{itemize}
 \setlength\itemsep{0em}
-\item Because we have a set of samples, we can apply each format to the samples to see how well it performs. Formats with fewer parse errors are preferred.
-\item Date parts can be considered a place-value system, so we prefer ``more significant'' components (\eg month-day-year over hour-minute-second).
-\item If two formats from different locales give the same results, prefer the original column locale. The sample set may have missed an example where this could be important. For example, the month name for "September" is the same in both English and German, but ``October" and ``Oktober" are different.
-\item If the format has an ambiguous date order (\eg all days are less than 12), then prefer the default date order of the locale. Again, the sample set may have missed a counterexample, so this is the best option.
+\item We can apply each format to the set of samples we have, to see how well the algorithm performs. Formats with fewer parse errors are preferred.
+\item Date parts can be considered a place-value system, so we prefer ``more significant'' components (\textit{e.g.}, month-day-year over hour-minute-second).
+\item If two formats from different locales give the same results, prefer the original column locale. The sample set may have missed an example where this could be important. For example, the month name for ``September" is the same in both English and German, but ``October" and ``Oktober" are different.
+\item If the format has an ambiguous date order (\textit{e.g.}, all days are less than 12), then prefer the default date order of the locale. Again, the sample set may have missed a counterexample, so this is the best option.
 \item Once these semantic preferences have been considered, we then prefer the more compact (MDL) representation.
 \end{itemize}
 
