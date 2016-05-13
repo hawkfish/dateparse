@@ -99,7 +99,7 @@ Automating the Extraction of Date Scalars}
 \maketitle
 
 \begin{abstract}
-Interactive visual analytics is an effective approach for the timely analysis of data. Users who are already engaged in interactive data analysis prefer staying in the visualization environment for unavoidable data cleaning and preparation tasks to preserve their analytic flow. This has led visualization environments to include simple data preparation functions such as scalar parsing, pattern matching and categorical binning. One common scalar parsing task is extracting date and time data from string representations. Several relational database management systems (RDBMSs) include date parsing ``mini-languages'' to cover the wide range of possible formats, but analysis of user data from one visualization system shows that the parsing language syntax is difficult for users to master without disturbing their analytic flow.
+Interactive visual analytics is an effective approach for the timely analysis of data. Users who are already engaged in interactive data analysis prefer staying in the visualization environment for unavoidable data cleaning and preparation tasks to preserve their analytic flow. This has led visualization environments to include simple data preparation functions such as scalar parsing, pattern matching and categorical binning. One common scalar parsing task is extracting date and time data from string representations. Several relational database management systems (RDBMSs) include date parsing ``mini-languages'' to cover the wide range of possible formats, but analysis of user data from one visualization system shows that the parsing language syntax can be difficult for users to master.
 
 In this paper, we present two algorithms for automatically deriving date formats from a column of data with minimal user disruption, one based on minimal entropy representations and another based on natural language processing techniques. Both have accuracies of over 95\% on a large corpus of date columns extracted from an online data repository. One of the methods is also fast enough to produce results within the user's perceptual threshold. Moreover, we were able to avoid prohibitively expensive manual verification by using the algorithms to cross-check each other at scale.
 \end{abstract}
@@ -117,6 +117,11 @@ In this paper, we present two algorithms for automatically deriving date formats
 <concept_significance>500</concept_significance>
 </concept>
 <concept>
+<concept_id>10002951.10002952.10003219.10003223</concept_id>
+<concept_desc>Information systems~Entity resolution</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
 <concept_id>10002951.10003227.10003351.10003218</concept_id>
 <concept_desc>Information systems~Data cleaning</concept_desc>
 <concept_significance>500</concept_significance>
@@ -124,21 +129,21 @@ In this paper, we present two algorithms for automatically deriving date formats
 <concept>
 <concept_id>10002951.10003317.10003347.10003352</concept_id>
 <concept_desc>Information systems~Information extraction</concept_desc>
-<concept_significance>500</concept_significance>
+<concept_significance>300</concept_significance>
 </concept>
 <concept>
-<concept_id>10002951.10002952.10003219.10003223</concept_id>
-<concept_desc>Information systems~Entity resolution</concept_desc>
+<concept_id>10010147.10010178.10010179.10010182</concept_id>
+<concept_desc>Computing methodologies~Natural language generation</concept_desc>
 <concept_significance>300</concept_significance>
 </concept>
 </ccs2012>
 \end{CCSXML}
 
 \ccsdesc[500]{Information systems~Extraction, transformation and loading}
+\ccsdesc[500]{Information systems~Entity resolution}
 \ccsdesc[500]{Information systems~Data cleaning}
-\ccsdesc[500]{Information systems~Information extraction}
-\ccsdesc[300]{Information systems~Entity resolution}
-%
+\ccsdesc[300]{Information systems~Information extraction}
+\ccsdesc[300]{Computing methodologies~Natural language generation}%
 % End generated code
 %
 
