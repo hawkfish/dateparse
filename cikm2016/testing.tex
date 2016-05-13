@@ -19,14 +19,14 @@ The data was divided into two sets, one for training and one for validation. The
 % Should we quantify the number of formats excluded here?
 
 \subsubsection{NULL Filtering}
-Each column was then reduced to a maximum sample set of 32. We excluded domain values that either contain the substring \texttt{NULL}, contain no digits and at most one non-whitespace character (\eg \texttt{" / / "}), or any empirically determined common \texttt{NULL} value (\eg \texttt{0000-00-00}, \texttt{NaN}).
+Each column was then reduced to a maximum sample set of 32. We excluded domain values that either contain the substring \texttt{NULL}, contain no digits and at most one non-whitespace character (\textit{e.g.}, \texttt{" / / "}), or any empirically determined common \texttt{NULL} value (\textit{e.g.}, \texttt{0000-00-00}, \texttt{NaN}).
 %Columns that had no remaining valid samples were discarded. 
 
 \subsubsection{Sampling}
 The remaining samples were hashed and sorted on the hash value, with the top $32$ values retained as the column's sample. We can increase the sample size, but for dates, it appears to be an adequate number. In any case, the median number of non-null rows per domain in our test data is $50$, so increasing the sample size would have little benefit.
 
 \subsubsection{Numeric Timestamps}
-After NULL filtering, a common class of date representation (numeric timestamps) remained that was unsuited for parsing via our date format syntax. This included Unix epoch timestamps (expressed as second, millisecond or microsecond counts from \texttt{1970-01-01}) and Microsoft Excel timestamps (expressed fractional days since \texttt{1900-01-01}). A simple test to check that the column was numeric and inside a specific range of values representing recent dates allowed us to tag these columns to avoid analyzing them further (and incidentally to identify them for generating a simple date extraction calculation for the user.)
+After NULL filtering, a common class of date representation (numeric timestamps) remained that was unsuited for parsing via our date format syntax. This included Unix epoch timestamps (expressed as second, millisecond or microsecond counts from \texttt{1970-01-01}) and Microsoft Excel time-stamps (expressed as fractional days since \texttt{1900-01-01}). A simple test to check that the column was numeric and inside a specific range of values representing recent dates allowed us to tag these columns to avoid analyzing them further (and incidentally to identify them for generating a simple date extraction calculation for the user.)
 
 
 \subsubsection{Partial Dates}
@@ -75,7 +75,7 @@ The validation speed is the average time needed to parse a value, and provides a
 \label{fig:mdlerror}
 \end{figure}
 
-The error rate reflects the fact that only about $40\%$ of the files have an associated format that parses the non-null values without error. To examine the error rate in greater detail, we turn now to Figure~\ref{fig:mdlerror}.
+The error rate reflects the fact that only about $40\%$ of the files have an associated format that parses the non-null values without error. To examine the error rate in greater detail, we refer to Figure~\ref{fig:mdlerror}.
 
 The two horizontal reference lines in Figure~\ref{fig:mdlerror} show that we found 744 distinct formats that parsed the $13,424$ associated files with no error. 
 This is a remarkable number of distinct formats and underscores the need for this kind of algorithm. 
@@ -91,7 +91,7 @@ What do these formats look like? Figure~\ref{fig:mdloutput} shows a histogram of
 \end{figure}
 
 Some of the dates are clearly just numbers, but our approach is to assume that when the user tells us that the column contains dates we should find the best fit. 
-The samples include dates from a wide range of historical sources (\eg Roman pottery dates) so we have elected to defer the semantic identification task to the user.
+The samples include dates from a wide range of historical sources (\textit{e.g.}, Roman pottery dates) so we have elected to defer the semantic identification task to the user.
 
 \subsection{Natural Language Processing}
 
@@ -99,10 +99,10 @@ We implemented the grammar, training and parsing in Python 3.4.1 using the Natur
 
 Similar to the MDL algorithm, the CYK parser is run over the same set of samples from each validation file to generate a ranked list of parse trees representing the date-time formats. As a second pass of the parser, starting from the most probable parse tree, each parse tree is then applied to the entire file's columnar data to determine the dominant pattern(s). For the second pass, we can parallelize the CYK parsing because the dependencies between reapplying the ranked list of parse trees are very sparse.
 
-The initial average parsing speed to compute the ranked set of probable parse trees is $0.93s$, while the average time taken to compute the overall dominant pattern(s) for the entire column of data is $1.4s$. While the natural language parsing implementation is in Python as the NLTK package is easily configurable, we could expect greater speed-up in parsing performance by employing C/C++ CYK parsing libraries.
+The initial average parsing speed to compute the ranked set of probable parse trees is $0.93s$, and the average time taken to compute the overall dominant pattern(s) for the entire column of data is $1.4s$. While the natural language parsing implementation is in Python as the NLTK package is easily configurable, we could expect greater speed-up in parsing performance by employing C/C++ CYK parsing libraries.
 
 
-Out of the $31,546$ files used for testing, the NLP parser identified a dominant format for $26, 534 (84.11\%)$ where $p >= 0.5$. $1634$ unique formats were identified. Figure \ref{fig:NLP1} shows a histogram of the most common formats identified containing \texttt{Year}. There are some variations compared to Figure \ref{fig:mdloutput} including the fact that we are not filtering the results by any error rate in the NLP parsed results.
+Out of the $31,546$ files used for testing, the NLP parser identified a dominant format for $26, 534$ ($84.11\%$) where $p >= 0.5$. $1634$ unique formats were identified. Figure \ref{fig:NLP1} shows a histogram of the most common formats identified containing \texttt{Year}. There are some variations compared to Figure \ref{fig:mdloutput} including the fact that we are not filtering the results by any error rate in the NLP parsed results.
 
 \begin{figure}[ht]
 \centering
