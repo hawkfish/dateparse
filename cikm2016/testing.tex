@@ -32,7 +32,7 @@ After NULL filtering, a common class of date representation (numeric timestamps)
 \subsubsection{Partial Dates}
 Many of the date formats that we encountered were incomplete dates, which necessitated creating rules for what date scalar they represented.
 
-ICU's date parsing APIs allow the specification of default values for parts not found in the format. In our implementation, all time fields are set to \texttt{0} (midnight) and the date fields are set based on whether the format contains any date part specifications. When date parts are present, we use \texttt{2000-01-01} as the set of default date parts as it is the start of a leap year. When dealing with pure time formats, we model the output as a date/time and use \texttt{1899-12-30} for the date parts.
+ICU's date parsing APIs allow the specification of default values for parts not found in the format. In our implementation, all time fields are set to \texttt{0} (midnight) and the date fields are set based on whether the format contains any date part specifications. When date parts are present, we use \texttt{2000-01-01} as the set of default date parts as it is the start of a leap year. When dealing with pure time formats, we model the output as a date/time and use \texttt{1899-12-30} for the date parts.\\
 
 ICU will also parse Time Zones and Quarters (which we interpret as the first month of the period.) RDBMSes such as Oracle and Postgres that support time zones will be able to take advantage of  identified time zone fields.
 
