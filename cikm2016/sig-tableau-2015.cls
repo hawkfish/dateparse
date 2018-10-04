@@ -178,8 +178,8 @@
 
 
 
-\def\doi#1{\def\@doi{#1}}
-\doi{http://dx.doi.org/10.1145/0000000.0000000}
+\def\ttn#1{\def\@ttn{#1}}
+\ttn{http://dx.doi.org/10.1145/0000000.0000000}
 
 \oddsidemargin 4.5pc
 \evensidemargin 4.5pc
@@ -1619,7 +1619,7 @@
 \newtoks\copyrtyr
 \newtoks\acmcopyr
 \newtoks\boilerplate
-\global\acmcopyr={}  % Default - 5/11/2001 *** Gerry
+\global\acmcopyr={X-XXXXX-XX-X/XX/XX}  % Default - 5/11/2001 *** Gerry
 \global\copyrtyr={\the\year}                % Default - 3/3/2003 *** Gerry
 \def\acmPrice#1{\gdef\@acmPrice{#1}}
 \acmPrice{} %article price  % Changed to 15 - June 2012 - Gerry
@@ -1632,19 +1632,19 @@
 % ISBN
 %
 \def\isbn#1{\global\acmcopyr={#1}}
-%\isbn{978-1-4503-2138-9}
+\isbn{978-1-4503-2138-9}
 
 \RequirePackage{url}
 \urlstyle{rm}
-\def\doi#1{\def\@doi{#1}}
-\doi{10.1145/1235}
-\def\printdoi#1{\url{#1}}
+\def\ttn#1{\def\@ttn{#1}}
+\ttn{10.1145/1235}
+\def\printttn#1{\url{#1}}
 
 
 
 % Copyright
 \RequirePackage{tabcopyright}
-\setcopyright{tableau}
+\setcopyright{none}
 
 %
 \global\boilerplate={\@copyrightpermission}
@@ -1659,7 +1659,7 @@
     \copyright\ \the\copyrtyr\ \@copyrightowner
   \fi
  \the\acmcopyr\ifx\@acmPrice\@empty.\else\dots\@acmPrice\fi\par\smallskip
-}
+{Tableau Technical Note: \small\expandafter\printttn\expandafter{\@ttn}}}
 \toappear{\fontsize{7pt}{8pt}\fontfamily{ptm}\selectfont
   \the\boilerplate\par\smallskip
  \the\copyrightetc}
@@ -1671,7 +1671,7 @@
     \copyright\ \the\copyrtyr\ \@copyrightowner
   \fi
  \the\acmcopyr\ifx\@acmPrice\@empty.\else\dots\@acmPrice\fi\par\smallskip
-}
+{Tableau Technical Note: \small\expandafter\printttn\expandafter{\@ttn}}}
 \toappear{\fontsize{7.5pt}{8.5pt}\fontfamily{ptm}\selectfont
   \the\boilerplate\par\smallskip
  \the\copyrightetc}
