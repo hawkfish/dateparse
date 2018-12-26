@@ -43,6 +43,7 @@
 \usepackage{tikz}
 \usepackage{enumitem}
 \usepackage{hyperref}
+\usepackage[hang,flushmargin]{footmisc}
 \captionsetup[table]{skip=10pt}
 
 \newenvironment{tight_itemize}{\begin{itemize} \itemsep
@@ -93,7 +94,13 @@
 \renewcommand{\dblfloatpagefraction}{0.8}   % require fuller float pages
 
 \setlength{\tabcolsep}{4pt}   % set length to -2pt
-%
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
 \begin{document}
 
 
@@ -187,6 +194,11 @@ In this paper, we present two algorithms for automatically deriving date formats
 %\printccsdesc
 
 %\keywords{Algorithms, Performance}
+\blfootnote{\tiny{Copyright \copyright 2018\\
+Tableau Software All rights reserved.\\
+The information contained in this document is the exclusive property of Tableau.
+This work is protected under United States copyright law and other international copyright treaties and conventions.No part of this work may be reproduced, used, or transmitted in any form or by any means except as expressly permitted in writing by Tableau.\\
+All requests should be sent to Attention: Tableau Legal \href{mailto:legal@tableau.com}{legal@tableau.com}}}
 
 \section{Introduction} \label{sec:intro}
 \input{intro}
