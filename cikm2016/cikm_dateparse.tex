@@ -26,10 +26,14 @@
 %
 % For tracking purposes - this is V3.1SP - APRIL 2009
 
-%\documentclass{acm_proc_article-sp}
-%\documentclass[conference]{IEEEtran}
-\documentclass{sig-tableau-2015}
+\documentclass[10pt,twoside,a4paper,twocolumn]{article}
+\usepackage[left=1.75cm, right=1.75cm, top=2cm]{geometry}
+\setlength\columnsep{20pt}
+
+
+
 %
+
 \usepackage{url}
 \usepackage{syntax}
 \usepackage{amsmath}% http://ctan.org/pkg/amsmath
@@ -38,6 +42,7 @@
 \usepackage{caption} 
 \usepackage{tikz}
 \usepackage{enumitem}
+\usepackage{hyperref}
 \captionsetup[table]{skip=10pt}
 
 \newenvironment{tight_itemize}{\begin{itemize} \itemsep
@@ -87,24 +92,47 @@
 % N.B.: floatpagefraction MUST be less than topfraction !!
 \renewcommand{\dblfloatpagefraction}{0.8}   % require fuller float pages
 
-
+\setlength{\tabcolsep}{4pt}   % set length to -2pt
 %
 \begin{document}
 
-% Copyright
-\setcopyright{tableau}
 
-% ISBN
-\isbn{}
+%\input{authors}
 
-% Tableau Tech Note
-\ttn{2018-01}
+%\maketitle
 
-\title{Does Anybody Really Know What Time It Is?\\
-Automating the Extraction of Date Scalars}
-\input{authors}
+\begin{titlepage}
+   \begin{center}
+       \vspace*{1cm}
+  \includegraphics[width=0.3\textwidth]{figures/tableau}
+     \vspace*{1cm}
+ 
+        \Large       
+ \textbf{Does Anybody Really Know What Time It Is?\\
+Automating the Extraction of Date Scalars}\\
+ TR \#2018-01
+       \vspace{1cm}
+ 
+\large
+\textbf{Richard Wesley\\
+Vidya Setlur\\
+Dan Cory} 
+     %  \vfill
 
-\maketitle
+       \vspace{2cm}
+ Tableau Software\\
+     1621 North 34th Street\\
+      Seattle, WA 98103\\  
+ \vspace{2cm}
+ \small
+Copyright \copyright 2018\\
+Tableau Software All rights reserved.\\
+The information contained in this document is the exclusive property of Tableau.
+This work is protected under United States copyright law and other international copyright treaties and conventions.No part of this work may be reproduced, used, or transmitted in any form or by any means except as expressly permitted in writing by Tableau.\\
+All requests should be sent to Attention: Tableau Legal \href{mailto:legal@tableau.com}{legal@tableau.com} 
+ \end{center}
+\end{titlepage}
+
 
 \begin{abstract}
 Interactive visual analytics is an effective approach for the timely analysis of data. Users who are already engaged in interactive data analysis prefer staying in the visualization environment for unavoidable data cleaning and preparation tasks to preserve their analytic flow. This has led visualization environments to include simple data preparation functions such as scalar parsing, pattern matching and categorical binning. One common scalar parsing task is extracting date and time data from string representations. Several relational database management systems (RDBMSs) include date parsing ``mini-languages'' to cover the wide range of possible formats, but analysis of user data from one visualization system shows that the parsing language syntax can be difficult for users to master.
@@ -117,46 +145,46 @@ In this paper, we present two algorithms for automatically deriving date formats
 % http://dl.acm.org/ccs.cfm
 % Please copy and paste the code instead of the example below. 
 %
-\begin{CCSXML}
-<ccs2012>
-<concept>
-<concept_id>10002951.10003227.10003351.10003218</concept_id>
-<concept_desc>Information systems~Data cleaning</concept_desc>
-<concept_significance>500</concept_significance>
-</concept>
-<concept>
-<concept_id>10002951.10002952.10003219.10003215</concept_id>
-<concept_desc>Information systems~Extraction, transformation and loading</concept_desc>
-<concept_significance>300</concept_significance>
-</concept>
-<concept>
-<concept_id>10002951.10002952.10003219.10003223</concept_id>
-<concept_desc>Information systems~Entity resolution</concept_desc>
-<concept_significance>300</concept_significance>
-</concept>
-<concept>
-<concept_id>10002951.10003317.10003347.10003352</concept_id>
-<concept_desc>Information systems~Information extraction</concept_desc>
-<concept_significance>300</concept_significance>
-</concept>
-<concept>
-<concept_id>10010147.10010178.10010179.10010182</concept_id>
-<concept_desc>Computing methodologies~Natural language generation</concept_desc>
-<concept_significance>300</concept_significance>
-</concept>
-</ccs2012>
-\end{CCSXML}
-
-\ccsdesc[500]{Information systems~Data cleaning}
-\ccsdesc[300]{Information systems~Extraction, transformation and loading}
-\ccsdesc[300]{Information systems~Entity resolution}
-\ccsdesc[300]{Information systems~Information extraction}
-\ccsdesc[300]{Computing methodologies~Natural language generation}%
+%\begin{CCSXML}
+%<ccs2012>
+%<concept>
+%<concept_id>10002951.10003227.10003351.10003218</concept_id>
+%<concept_desc>Information systems~Data cleaning</concept_desc>
+%<concept_significance>500</concept_significance>
+%</concept>
+%<concept>
+%<concept_id>10002951.10002952.10003219.10003215</concept_id>
+%<concept_desc>Information systems~Extraction, transformation and loading</concept_desc>
+%<concept_significance>300</concept_significance>
+%</concept>
+%<concept>
+%<concept_id>10002951.10002952.10003219.10003223</concept_id>
+%<concept_desc>Information systems~Entity resolution</concept_desc>
+%<concept_significance>300</concept_significance>
+%</concept>
+%<concept>
+%<concept_id>10002951.10003317.10003347.10003352</concept_id>
+%<concept_desc>Information systems~Information extraction</concept_desc>
+%<concept_significance>300</concept_significance>
+%</concept>
+%<concept>
+%<concept_id>10010147.10010178.10010179.10010182</concept_id>
+%<concept_desc>Computing methodologies~Natural language generation</concept_desc>
+%<concept_significance>300</concept_significance>
+%</concept>
+%</ccs2012>
+%\end{CCSXML}
+%
+%\ccsdesc[500]{Information systems~Data cleaning}
+%\ccsdesc[300]{Information systems~Extraction, transformation and loading}
+%\ccsdesc[300]{Information systems~Entity resolution}
+%\ccsdesc[300]{Information systems~Information extraction}
+%\ccsdesc[300]{Computing methodologies~Natural language generation}%
 
 %
 %  Use this command to print the description
 %
-\printccsdesc
+%\printccsdesc
 
 %\keywords{Algorithms, Performance}
 
@@ -189,7 +217,7 @@ In this paper, we present two algorithms for automatically deriving date formats
 % The following two commands are all you need in the
 % initial runs of your .tex file to
 % produce the bibliography for the citations in your paper.
-\bibliographystyle{abbrv}
+%\bibliographystyle{abbrv}
 \bibliography{dateparse}  % sigproc.bib is the name of the Bibliography in this case
 % You must have a proper ``.bib'' file
 %  and remember to run:
